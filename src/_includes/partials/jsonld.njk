@@ -1,0 +1,49 @@
+{%- set personId = site.url + "/#mario-lorenzetti" -%}
+{%- set graph = [
+  {
+    "@type": "WebSite",
+    "@id": site.url + "/#website",
+    "url": site.url + "/",
+    "name": site.name,
+    "inLanguage": ["it", "fr"],
+    "publisher": { "@id": personId }
+  },
+  {
+    "@type": "Person",
+    "@id": personId,
+    "name": "Mario Lorenzetti",
+    "url": site.url + "/",
+    "image": (site.url + "/wp-content/uploads/2022/06/mario-lorenzetti-docente-respirazione-olotropica.jpg"),
+    "jobTitle": "Facilitatore di Respirazione Olotropica e counselor transpersonale",
+    "telephone": site.phone,
+    "email": site.email,
+    "knowsAbout": ["Respirazione Olotropica", "Holotropic Breathwork", "Psicologia transpersonale", "Sciamanismo", "Counseling", "Ecopsicologia", "Stati non ordinari di coscienza"],
+    "sameAs": site.sameAs
+  }
+] -%}
+{%- if ogType == "article" -%}
+{%- set _ = graph.push({
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description | truncate(300),
+  "datePublished": date | isoDate,
+  "dateModified": (updated or date) | isoDate,
+  "inLanguage": lang,
+  "mainEntityOfPage": page.url | abs,
+  "image": (image or site.defaultImage) | abs,
+  "author": { "@id": personId },
+  "publisher": { "@id": personId }
+}) -%}
+{%- endif -%}
+{%- if extraJsonLd -%}
+{%- set _ = graph.push(extraJsonLd) -%}
+{%- endif -%}
+{%- if page.url != "/" and page.url != "/fr/" -%}
+{%- set crumbs = [{ "@type": "ListItem", "position": 1, "name": i18n[lang].home, "item": site.url + ("/fr/" if lang == "fr" else "/") }] -%}
+{%- if breadcrumbParent -%}
+{%- set _ = crumbs.push({ "@type": "ListItem", "position": 2, "name": breadcrumbParent.name, "item": breadcrumbParent.url | abs }) -%}
+{%- endif -%}
+{%- set _ = crumbs.push({ "@type": "ListItem", "position": crumbs.length + 1, "name": title, "item": page.url | abs }) -%}
+{%- set _ = graph.push({ "@type": "BreadcrumbList", "itemListElement": crumbs }) -%}
+{%- endif %}
+<script type="application/ld+json">{{ { "@context": "https://schema.org", "@graph": graph } | jsonScript | safe }}</script>

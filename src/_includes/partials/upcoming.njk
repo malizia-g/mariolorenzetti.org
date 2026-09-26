@@ -1,0 +1,17 @@
+{#- Prossime date: verrà alimentato dal Google Sheet (events.upcoming). -#}
+{%- set list = (events.upcoming if events and events.upcoming else []) | batch(3) | first -%}
+{%- if list and list.length %}
+<section class="border-y border-sand-200 bg-white">
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="flex items-end justify-between gap-4">
+      <h2 class="text-3xl font-medium">{{ i18n[lang].upcoming }}</h2>
+      <a href="/calendario/" class="text-sm font-medium text-moss-600 hover:underline">{{ i18n[lang].allDates }} →</a>
+    </div>
+    <ul class="mt-8 grid gap-5 md:grid-cols-3">
+      {%- for ev in list %}
+      <li>{% include "partials/event-card.njk" %}</li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+{%- endif %}

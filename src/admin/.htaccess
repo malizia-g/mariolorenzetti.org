@@ -1,0 +1,7 @@
+# Solo index.html e api.php sono raggiungibili dal browser.
+<FilesMatch "^(lib|config|config\.example)\.php$">
+  Require all denied
+</FilesMatch>
+Header always set X-Robots-Tag "noindex, nofollow"
+Header always set Cache-Control "no-store"
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style https://cdn.jsdelivr.net; img-src 'self' data: blob: https:; frame-src https://accounts.google.com/gsi/; connect-src 'self' https://accounts.google.com/gsi/; font-src 'self' https://cdn.jsdelivr.net"

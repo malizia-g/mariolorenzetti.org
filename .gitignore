@@ -1,0 +1,7 @@
+node_modules/
+_site/
+.cache/
+src/_data/*.cache.json
+.env
+src/admin/config.php
+src/api/config.php

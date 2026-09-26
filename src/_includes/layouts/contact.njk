@@ -1,0 +1,69 @@
+---
+layout: layouts/base.njk
+---
+{%- set fr = lang == "fr" -%}
+<div class="mx-auto grid max-w-6xl gap-12 px-4 py-12 sm:px-6 md:grid-cols-[1fr_1.2fr] md:py-16">
+  <div>
+    <h1 class="text-4xl leading-tight font-medium md:text-5xl">{{ title }}</h1>
+    {%- if lead %}<p class="mt-4 text-xl text-ink-soft">{{ lead }}</p>{% endif %}
+    <dl class="mt-8 space-y-4">
+      <div><dt class="text-xs font-medium tracking-wide text-ink-soft uppercase">{{ "Téléphone" if fr else "Telefono" }}</dt><dd class="mt-1 text-lg"><a class="text-moss-600 hover:underline" href="{{ site.phoneHref }}">{{ site.phone }}</a></dd></div>
+      <div><dt class="text-xs font-medium tracking-wide text-ink-soft uppercase">Email</dt><dd class="mt-1 text-lg"><a class="text-moss-600 hover:underline" href="mailto:{{ site.email }}">{{ site.email }}</a></dd></div>
+    </dl>
+    <div class="prose-site mt-8">{{ content | safe }}</div>
+  </div>
+
+  <form id="contatto" action="/api/contatto.php" method="post" class="relative space-y-5 rounded-2xl border border-sand-200 bg-white p-6 md:p-8">
+    <p id="esito" role="status" class="hidden rounded-lg p-4"></p>
+    <input type="hidden" name="lang" value="{{ lang }}">
+    <input type="hidden" name="t" value="">
+    {# Honeypot: invisibile alle persone, i bot lo compilano. #}
+    <div class="absolute -left-[9999px]" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div>
+      <label for="nome" class="block text-sm font-medium">{{ "Nom" if fr else "Nome" }} *</label>
+      <input id="nome" name="nome" required autocomplete="name" class="mt-1 w-full rounded-lg border border-sand-200 bg-sand-50 px-4 py-2.5 focus:border-moss-500 focus:outline-none">
+    </div>
+    <div>
+      <label for="email" class="block text-sm font-medium">Email *</label>
+      <input id="email" name="email" type="email" required autocomplete="email" class="mt-1 w-full rounded-lg border border-sand-200 bg-sand-50 px-4 py-2.5 focus:border-moss-500 focus:outline-none">
+    </div>
+    <div>
+      <label for="oggetto" class="block text-sm font-medium">{{ "Objet" if fr else "Oggetto" }}</label>
+      <input id="oggetto" name="oggetto" class="mt-1 w-full rounded-lg border border-sand-200 bg-sand-50 px-4 py-2.5 focus:border-moss-500 focus:outline-none">
+    </div>
+    <div>
+      <label for="messaggio" class="block text-sm font-medium">{{ "Message" if fr else "Messaggio" }} *</label>
+      <textarea id="messaggio" name="messaggio" rows="6" required class="mt-1 w-full rounded-lg border border-sand-200 bg-sand-50 px-4 py-2.5 focus:border-moss-500 focus:outline-none"></textarea>
+    </div>
+    <label class="flex items-start gap-3 text-sm text-ink-soft">
+      <input type="checkbox" name="privacy" value="1" required class="mt-1 accent-moss-600">
+      <span>{% if fr %}J'accepte le traitement de mes données selon la <a class="underline" href="{{ site.privacyUrl }}" target="_blank" rel="noopener">politique de confidentialité</a>.{% else %}Acconsento al trattamento dei dati secondo l'<a class="underline" href="{{ site.privacyUrl }}" target="_blank" rel="noopener">informativa privacy</a>.{% endif %} *</span>
+    </label>
+    <button type="submit" class="btn-primary">{{ "Envoyer" if fr else "Invia messaggio" }}</button>
+  </form>
+</div>
+<script>
+  (() => {
+    const form = document.getElementById("contatto");
+    const esito = document.getElementById("esito");
+    const params = new URLSearchParams(location.search);
+    form.t.value = Date.now();
+    if (params.get("evento")) form.oggetto.value = params.get("evento");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector("button");
+      btn.disabled = true;
+      try {
+        const res = await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
+        const data = await res.json();
+        esito.textContent = data.message;
+        esito.className = "rounded-lg p-4 " + (data.ok ? "bg-moss-600/10 text-moss-700" : "bg-clay-500/10 text-clay-600");
+        if (data.ok) form.reset();
+      } catch {
+        esito.textContent = "{{ 'Erreur. Écrivez directement à ' if fr else 'Errore di invio. Scrivi direttamente a ' }}{{ site.email }}";
+        esito.className = "rounded-lg p-4 bg-clay-500/10 text-clay-600";
+      }
+      btn.disabled = false;
+    });
+  })();
+</script>

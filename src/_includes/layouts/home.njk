@@ -1,0 +1,34 @@
+---
+layout: layouts/base.njk
+---
+{%- set isFr = lang == "fr" -%}
+<section class="relative overflow-hidden bg-sand-100">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.3fr_1fr] md:py-20">
+    <div>
+      <p class="text-sm font-medium tracking-widest text-clay-600 uppercase">{{ "Respiration Holotropique · Voie chamanique" if isFr else "Respirazione Olotropica · Counseling · Sciamanismo" }}</p>
+      <h1 class="mt-4 text-4xl leading-[1.1] font-medium md:text-6xl">{{ heroTitle or title }}</h1>
+      {%- if heroText %}
+      <p class="mt-6 max-w-xl text-lg text-ink-soft">{{ heroText }}</p>
+      {%- endif %}
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="{{ '/fr/stages/' if isFr else '/calendario/' }}" class="btn-primary">{{ "Prochains stages" if isFr else "Prossimi seminari" }}</a>
+        <a href="{{ '/fr/respiration-holotropique/' if isFr else '/respirazione-olotropica/' }}" class="btn-ghost">{{ "Qu'est-ce que c'est ?" if isFr else "Cos'è la Respirazione Olotropica" }}</a>
+      </div>
+    </div>
+    {%- if heroImage %}
+    <div class="mx-auto w-64 md:w-full md:max-w-sm">
+      <img src="{{ heroImage }}" alt="{{ heroImageAlt or 'Mario Lorenzetti' }}" class="aspect-[3/4] w-full rounded-[2rem] object-cover shadow-xl" loading="eager" fetchpriority="high" sizes="(min-width: 768px) 384px, 256px">
+    </div>
+    {%- endif %}
+  </div>
+</section>
+
+{%- if not isFr %}
+{% include "partials/upcoming.njk" %}
+{%- endif %}
+
+<article class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+  <div class="prose-site">
+    {{ content | safe }}
+  </div>
+</article>

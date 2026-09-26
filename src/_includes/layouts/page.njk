@@ -1,0 +1,14 @@
+---
+layout: layouts/base.njk
+---
+<article class="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-16">
+  <header class="mb-10">
+    <h1 class="text-4xl leading-tight font-medium md:text-5xl">{{ title }}</h1>
+    {%- if lead %}
+    <p class="mt-4 text-xl text-ink-soft">{{ lead }}</p>
+    {%- endif %}
+  </header>
+  <div class="prose-site">
+    {{ content | safe }}
+  </div>
+</article>

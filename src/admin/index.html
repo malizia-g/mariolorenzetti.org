@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Editor – mariolorenzetti.org</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+  <style>
+    :root { --bg:#fbf8f3; --panel:#fff; --line:#e8dfd0; --ink:#1f2826; --soft:#5b6664; --moss:#3d5b4e; --moss-d:#2f473d; --clay:#b4633a; --ok:#2f7a4f; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); }
+    [hidden] { display:none !important; }
+    button, .btn { font:inherit; cursor:pointer; border-radius:999px; padding:.55rem 1.1rem; border:1px solid var(--line); background:var(--panel); color:var(--ink); text-decoration:none; display:inline-flex; gap:.4rem; align-items:center; }
+    .primary { background:var(--moss); color:#fff; border-color:var(--moss); }
+    .primary:hover { background:var(--moss-d); }
+    button:disabled { opacity:.5; cursor:default; }
+    #login { max-width:420px; margin:12vh auto; background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:2.5rem; text-align:center; }
+    #login h1 { font-family:Georgia, serif; font-weight:500; margin:0 0 .5rem; }
+    #login p { color:var(--soft); }
+    #gbtn { display:flex; justify-content:center; margin-top:1.5rem; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.8rem 1.2rem; border-bottom:1px solid var(--line); background:var(--panel); position:sticky; top:0; z-index:10; flex-wrap:wrap; }
+    header strong { font-family:Georgia, serif; font-size:1.15rem; }
+    header .actions { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+    #status { font-size:.85rem; color:var(--soft); }
+    #status.run { color:var(--clay); } #status.ok { color:var(--ok); } #status.ko { color:#b3261e; }
+    .layout { display:grid; grid-template-columns:300px 1fr; min-height:calc(100vh - 58px); }
+    aside { border-right:1px solid var(--line); padding:1rem; overflow:auto; max-height:calc(100vh - 58px); position:sticky; top:58px; }
+    aside h2 { font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--soft); margin:1.2rem 0 .4rem; }
+    aside ul { list-style:none; margin:0; padding:0; }
+    aside li button { width:100%; text-align:left; border:0; border-radius:10px; padding:.45rem .7rem; background:none; font-size:.93rem; }
+    aside li button:hover, aside li button.active { background:#f4eee4; }
+    .sheet { margin-top:1rem; display:block; padding:1rem; border-radius:14px; background:#f4eee4; color:var(--ink); text-decoration:none; font-size:.93rem; }
+    .sheet b { display:block; color:var(--moss); }
+    main { padding:1.5rem 2rem 4rem; max-width:980px; }
+    .empty { color:var(--soft); margin-top:20vh; text-align:center; }
+    .field { margin-bottom:1rem; }
+    .field label { display:flex; justify-content:space-between; font-size:.85rem; font-weight:600; margin-bottom:.3rem; }
+    .field label small { font-weight:400; color:var(--soft); }
+    .field small.help { color:var(--soft); font-size:.8rem; }
+    input[type=text], input[type=date], textarea.plain { width:100%; font:inherit; padding:.6rem .8rem; border:1px solid var(--line); border-radius:10px; background:var(--panel); }
+    .too-long { color:#b3261e !important; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .bar { display:flex; gap:.6rem; align-items:center; margin:1rem 0 1.5rem; flex-wrap:wrap; }
+    .bar .path { color:var(--soft); font-size:.8rem; margin-left:auto; }
+    details.seo { border:1px solid var(--line); border-radius:14px; padding:.8rem 1rem; margin-bottom:1rem; background:var(--panel); }
+    details.seo summary { cursor:pointer; font-weight:600; }
+    .preview-google { margin-top:.8rem; padding:.8rem; border-radius:10px; background:#fff; border:1px dashed var(--line); font-family:arial, sans-serif; }
+    .preview-google .t { color:#1a0dab; font-size:1.1rem; } .preview-google .u { color:#006621; font-size:.85rem; } .preview-google .d { color:#545454; font-size:.9rem; }
+    .EasyMDEContainer .CodeMirror { border-radius:0 0 12px 12px; border-color:var(--line); min-height:420px; font-size:16px; }
+    .editor-toolbar { border-radius:12px 12px 0 0; border-color:var(--line); background:var(--panel); }
+    .toast { position:fixed; bottom:1.2rem; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:.7rem 1.2rem; border-radius:12px; z-index:50; max-width:90vw; }
+    .toast.err { background:#b3261e; }
+    @media (max-width: 800px) { .layout { grid-template-columns:1fr; } aside { position:static; max-height:none; border-right:0; border-bottom:1px solid var(--line); } main { padding:1rem; } .row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <section id="login" hidden>
+    <h1>Editor del sito</h1>
+    <p>Accedi con il tuo account Google per modificare pagine e scritti di mariolorenzetti.org.</p>
+    <div id="gbtn"></div>
+    <p id="loginErr" class="too-long" hidden></p>
+  </section>
+
+  <div id="app" hidden>
+    <header>
+      <strong>mariolorenzetti.org · editor</strong>
+      <div class="actions">
+        <span id="status"></span>
+        <button id="publish" title="Rigenera il sito leggendo anche le date dal Google Sheet">↻ Aggiorna il sito</button>
+        <a id="viewSite" class="btn" target="_blank" rel="noopener">Vedi il sito ↗</a>
+        <button id="logout">Esci</button>
+      </div>
+    </header>
+    <div class="layout">
+      <aside>
+        <button id="newPost" class="primary" style="width:100%;justify-content:center">+ Nuovo scritto</button>
+        <a id="sheetLink" class="sheet" target="_blank" rel="noopener"><b>📅 Date dei seminari</b>Si modificano nel Google Sheet. Poi usa “Sito web → Pubblica le date sul sito” dal foglio, oppure “Aggiorna il sito” qui sopra.</a>
+        <nav id="files"></nav>
+      </aside>
+      <main>
+        <p id="empty" class="empty">Scegli una pagina a sinistra per modificarla.</p>
+        <form id="editor" hidden>
+          <div class="field">
+            <label for="f-title">Titolo della pagina</label>
+            <input type="text" id="f-title" required>
+          </div>
+          <div class="field" id="dateField" hidden>
+            <label for="f-date">Data di pubblicazione</label>
+            <input type="date" id="f-date">
+          </div>
+          <details class="seo">
+            <summary>Google e condivisioni social</summary>
+            <div class="field" style="margin-top:1rem">
+              <label for="f-seoTitle">Titolo per Google <small id="c-seoTitle"></small></label>
+              <input type="text" id="f-seoTitle">
+              <small class="help">Ideale sotto i 60 caratteri, con le parole che le persone cercano (es. “Respirazione Olotropica Torino”).</small>
+            </div>
+            <div class="field">
+              <label for="f-description">Descrizione per Google <small id="c-description"></small></label>
+              <textarea id="f-description" class="plain" rows="3"></textarea>
+              <small class="help">Tra 120 e 160 caratteri: è il testo che appare sotto il titolo nei risultati di ricerca.</small>
+            </div>
+            <div class="field">
+              <label for="f-image">Immagine per Facebook/WhatsApp</label>
+              <div style="display:flex;gap:.5rem"><input type="text" id="f-image" placeholder="/assets/uploads/..."><button type="button" id="imgPick">Carica…</button></div>
+              <small class="help">Orizzontale, almeno 1200×630 pixel.</small>
+            </div>
+            <div class="preview-google"><div class="t" id="p-t"></div><div class="u" id="p-u"></div><div class="d" id="p-d"></div></div>
+          </details>
+          <textarea id="body"></textarea>
+          <div class="bar">
+            <button type="submit" class="primary" id="save">Salva e pubblica</button>
+            <a id="viewPage" class="btn" target="_blank" rel="noopener">Vedi pagina ↗</a>
+            <span class="path" id="path"></span>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+  <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" hidden>
+
+  <script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script src="editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+name: Build e deploy
+
+on:
+  push:
+    branches: [main, staging]
+  # Avviato dal menu del Google Sheet e dal pulsante "Pubblica" dell'editor.
+  workflow_dispatch:
+  # Ogni notte: gli eventi conclusi passano in "Iniziative passate".
+  schedule:
+    - cron: "15 3 * * *"
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Ultima copia buona del Google Sheet, usata se Apps Script non risponde.
+      - uses: actions/cache@v4
+        with:
+          path: src/_data/events.cache.json
+          key: events-${{ github.run_id }}
+          restore-keys: events-
+
+      - name: Build
+        run: npm run build
+        env:
+          EVENTS_URL: ${{ secrets.EVENTS_URL }}
+          ALLOW_STALE_DATA: "1"
+          NOINDEX: ${{ github.ref_name == 'main' && '0' || '1' }}
+
+      - name: Controlli sul risultato
+        run: |
+          test -f _site/index.html
+          test -f _site/sitemap.xml
+          test -f _site/.htaccess
+          test -f _site/calendario/index.html
+          if [ "${{ github.ref_name }}" = "main" ] && grep -q 'noindex, follow' _site/index.html; then
+            echo "La produzione non deve avere noindex"; exit 1
+          fi
+
+      # Saltato finché i secret FTP di Serverplan non sono configurati.
+      - name: Deploy FTP
+        if: env.FTP_SERVER != ''
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          local-dir: ./_site/
+          server-dir: ${{ vars.FTP_SERVER_DIR || 'public_html/' }}

@@ -1,0 +1,19 @@
+---
+title: Scritti
+seoTitle: "Scritti di Mario Lorenzetti – Respirazione Olotropica, sciamanismo, stati di coscienza"
+description: "Articoli, saggi e prefazioni di Mario Lorenzetti su Respirazione Olotropica, sciamanismo, psicologia transpersonale e stati non ordinari di coscienza."
+permalink: /scritti/
+lead: "Saggi, prefazioni e riflessioni su Respirazione Olotropica, sciamanismo e stati di coscienza."
+---
+<ul class="not-prose divide-y divide-sand-200 border-y border-sand-200">
+  {%- for post in collections.articoli %}
+  <li class="py-6">
+    <article>
+      <p class="text-sm text-ink-soft"><time datetime="{{ post.date | isoDate }}">{{ post.date | longDate }}</time></p>
+      <h2 class="mt-1 text-2xl font-medium"><a href="{{ post.url }}" class="hover:text-moss-600">{{ post.data.title }}</a></h2>
+      <p class="mt-2 text-ink-soft">{{ post.data.description | truncate(220) }}</p>
+    </article>
+  </li>
+  {%- endfor %}
+</ul>
+<p class="not-prose mt-8"><a href="/pubblicazioni/" class="btn-ghost">Tutte le pubblicazioni e conferenze →</a></p>

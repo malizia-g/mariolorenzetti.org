@@ -1,0 +1,9 @@
+{%- set isPast = ev.end < build.today -%}
+<a href="{{ ev.url }}" class="group flex h-full flex-col rounded-2xl border border-sand-200 bg-sand-50 p-5 transition hover:border-moss-500/40 hover:shadow-md {% if isPast %}opacity-80{% endif %}">
+  <p class="text-sm font-medium text-clay-600"><time datetime="{{ ev.start }}">{{ ev.dateLabel }}</time></p>
+  <h3 class="mt-2 font-serif text-xl leading-snug text-moss-900 group-hover:text-moss-600">{{ ev.title }}</h3>
+  <p class="mt-2 text-sm text-ink-soft">
+    {{ ev.city }}{% if ev.venue %} · {{ ev.venue }}{% endif %}
+  </p>
+  <p class="mt-auto pt-4 text-xs font-medium tracking-wide text-ink-soft uppercase">{{ ev.type }}{% if ev.with %} · con {{ ev.with }}{% endif %}</p>
+</a>

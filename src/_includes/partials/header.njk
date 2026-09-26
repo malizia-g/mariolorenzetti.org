@@ -1,0 +1,60 @@
+{%- set nav = navigation[lang] -%}
+{%- set homeUrl = "/fr/" if lang == "fr" else "/" -%}
+{%- set otherLang = null -%}
+{%- for alt in alternates %}{% if alt.data.lang != lang %}{% set otherLang = alt.url %}{% endif %}{% endfor -%}
+<header class="sticky top-0 z-40 border-b border-sand-200 bg-sand-50/90 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-3 sm:px-6">
+    <a href="{{ homeUrl }}" class="group flex flex-col leading-tight">
+      <span class="font-serif text-xl font-semibold text-moss-900 group-hover:text-moss-600">Mario Lorenzetti</span>
+      <span class="text-xs tracking-wide text-ink-soft uppercase">{{ "Respiration Holotropique" if lang == "fr" else "Respirazione Olotropica" }}</span>
+    </a>
+
+    {# Desktop: menu a tendina via :hover / :focus-within, senza JavaScript. #}
+    <nav aria-label="Menu principale" class="hidden lg:block">
+      <ul class="flex items-center gap-1 text-[0.95rem]">
+        {%- for item in nav %}
+        <li class="group relative">
+          <a href="{{ item.url }}" class="block rounded-full px-3 py-2 hover:bg-sand-100 {% if page.url == item.url %}text-moss-600 font-medium{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>{{ item.label }}</a>
+          {%- if item.children %}
+          <ul class="invisible absolute left-0 top-full min-w-72 translate-y-1 rounded-xl border border-sand-200 bg-white p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+            {%- for child in item.children %}
+            <li><a href="{{ child.url }}" class="block rounded-lg px-3 py-2 text-sm hover:bg-sand-100 {% if page.url == child.url %}text-moss-600 font-medium{% endif %}">{{ child.label }}</a></li>
+            {%- endfor %}
+          </ul>
+          {%- endif %}
+        </li>
+        {%- endfor %}
+        <li class="ml-2">
+          <a href="{{ otherLang or ('/' if lang == 'fr' else '/fr/') }}" hreflang="{{ 'it' if lang == 'fr' else 'fr' }}" class="rounded-full border border-sand-200 px-3 py-1.5 text-xs font-medium uppercase tracking-wide hover:bg-sand-100">{{ "IT" if lang == "fr" else "FR" }}</a>
+        </li>
+      </ul>
+    </nav>
+
+    {# Mobile: <details> apre/chiude il menu senza JavaScript. #}
+    <details class="group lg:hidden">
+      <summary class="flex cursor-pointer list-none items-center gap-2 rounded-full border border-sand-200 px-4 py-2 text-sm font-medium [&::-webkit-details-marker]:hidden">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        {{ i18n[lang].menu }}
+      </summary>
+      <nav aria-label="Menu principale" class="absolute inset-x-0 top-full max-h-[80vh] overflow-y-auto border-b border-sand-200 bg-sand-50 px-4 pb-6 shadow-lg">
+        <ul class="divide-y divide-sand-200">
+          {%- for item in nav %}
+          <li class="py-2">
+            <a href="{{ item.url }}" class="block py-1 font-serif text-lg text-moss-900">{{ item.label }}</a>
+            {%- if item.children %}
+            <ul class="mt-1 space-y-1 pl-4">
+              {%- for child in item.children %}
+              <li><a href="{{ child.url }}" class="block py-1 text-ink-soft">{{ child.label }}</a></li>
+              {%- endfor %}
+            </ul>
+            {%- endif %}
+          </li>
+          {%- endfor %}
+          <li class="py-3">
+            <a href="{{ otherLang or ('/' if lang == 'fr' else '/fr/') }}" class="text-sm font-medium">{{ i18n[lang].otherLang }}</a>
+          </li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>

@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@source "../../src/**/*.{njk,md,html,js}";
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("../assets/fonts/fraunces-latin-wght-normal.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("../assets/fonts/fraunces-latin-wght-italic.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-latin-wght-italic.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+
+  --color-sand-50: #fbf8f3;
+  --color-sand-100: #f4eee4;
+  --color-sand-200: #e8dfd0;
+  --color-ink: #1f2826;
+  --color-ink-soft: #4a5553;
+  --color-moss-500: #4d6f5f;
+  --color-moss-600: #3d5b4e;
+  --color-moss-700: #2f473d;
+  --color-moss-900: #1b2a24;
+  --color-clay-500: #b4633a;
+  --color-clay-600: #97502e;
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-sand-50 text-ink font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif text-moss-900;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-clay-500;
+  }
+}
+
+@layer components {
+  .prose-site {
+    @apply prose prose-lg max-w-none
+      prose-headings:font-serif prose-headings:font-medium prose-headings:text-moss-900
+      prose-a:text-moss-600 prose-a:decoration-moss-500/40 prose-a:underline-offset-2 hover:prose-a:text-clay-600
+      prose-strong:text-ink
+      prose-blockquote:border-l-clay-500 prose-blockquote:bg-sand-100 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:font-normal
+      prose-img:rounded-xl prose-img:shadow-sm;
+  }
+  .prose-site blockquote p:first-of-type::before,
+  .prose-site blockquote p:last-of-type::after {
+    content: none;
+  }
+  .prose-site video,
+  .prose-site audio {
+    @apply w-full rounded-lg;
+  }
+}
+
+@utility btn {
+  @apply inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors;
+}
+@utility btn-primary {
+  @apply btn bg-moss-600 text-white hover:bg-moss-700;
+}
+@utility btn-ghost {
+  @apply btn border border-moss-600/30 text-moss-700 hover:bg-sand-100;
+}
