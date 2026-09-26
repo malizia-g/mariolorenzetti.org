@@ -11,6 +11,8 @@ export default {
   defaultImage: "/assets/og-default.jpg",
   // Staging (GitHub Pages) non deve essere indicizzato.
   noindex: process.env.NOINDEX === "1",
+  // Selettore dei temi di colore, solo nella demo.
+  themePicker: process.env.THEME_PICKER === "1",
   newsletter: {
     it: "https://stats.sender.net/forms/axk7jz/view",
     fr: "https://stats.sender.net/forms/elYMkV/view",

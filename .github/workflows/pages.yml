@@ -31,6 +31,7 @@ jobs:
           PATH_PREFIX: /${{ github.event.repository.name }}/
           NOINDEX: "1"
           EDITOR_DEMO: "1"
+          THEME_PICKER: "1"
           EVENTS_URL: ${{ secrets.EVENTS_URL }}
           ALLOW_STALE_DATA: "1"
       - uses: actions/upload-pages-artifact@v3

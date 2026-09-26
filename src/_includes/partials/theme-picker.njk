@@ -1,0 +1,73 @@
+{#- Selettore dei temi (solo demo, THEME_PICKER=1). La scelta resta salvata nel browser
+    e finisce nell'indirizzo (?tema=...), così un link porta con sé il tema. -#}
+<div id="temi" class="fixed right-4 bottom-4 z-50 font-serif">
+  <div id="temi-pannello" hidden class="mb-3 max-h-[70vh] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto border-[1.5px] border-ink bg-cream p-4 shadow-[6px_6px_0_var(--color-ink)]">
+    <p class="font-display text-xl text-ink">Scegli un tema</p>
+    <p class="mt-1 text-sm text-ink-soft italic">I colori cambiano su tutto il sito. Ricordati il nome di quello che preferisci.</p>
+    <ul class="mt-4 space-y-2">
+      {%- for th in themes.list %}
+      <li>
+        <button type="button" data-tema="{{ th.id }}" class="flex w-full items-center gap-3 border-[1.5px] border-transparent p-2 text-left hover:border-ink/30 aria-pressed:border-ink aria-pressed:bg-saffron-soft">
+          <span class="flex shrink-0 -space-x-1.5" aria-hidden="true">
+            {%- for c in [th.colors.saffron, th.colors.clay, th.colors.sienna, th.colors.parchment] %}
+            <span class="size-6 rounded-full border border-black/20" style="background:{{ c }}"></span>
+            {%- endfor %}
+          </span>
+          <span class="min-w-0">
+            <span class="block font-semibold text-ink">{{ loop.index }}. {{ th.name }}</span>
+            <span class="block text-sm leading-snug text-ink-soft">{{ th.note }}</span>
+          </span>
+        </button>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+  <button id="temi-apri" type="button" aria-expanded="false" aria-controls="temi-pannello" class="btn-primary ml-auto flex">
+    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.5-.8 1.5-1.5 0-1.2-1-1.5-1-2.5 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.1-4-7.5-9-7.5Z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10" cy="7" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/></svg>
+    <span>Tema: <span id="temi-nome"></span></span>
+  </button>
+</div>
+<script>
+  (() => {
+    const names = {{ themes.list | pluck("name") | dump | safe }};
+    const ids = {{ themes.list | pluck("id") | dump | safe }};
+    const root = document.documentElement;
+    const panel = document.getElementById("temi-pannello");
+    const toggle = document.getElementById("temi-apri");
+    const label = document.getElementById("temi-nome");
+    const buttons = panel.querySelectorAll("[data-tema]");
+
+    function show(id) {
+      root.dataset.theme = id;
+      label.textContent = names[ids.indexOf(id)];
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tema === id)));
+    }
+    function open(state) {
+      panel.hidden = !state;
+      toggle.setAttribute("aria-expanded", String(state));
+    }
+
+    buttons.forEach((b) => b.addEventListener("click", () => {
+      show(b.dataset.tema);
+      try { localStorage.setItem("tema", b.dataset.tema); } catch {}
+      const url = new URL(location.href);
+      url.searchParams.set("tema", b.dataset.tema);
+      history.replaceState(null, "", url);
+    }));
+    toggle.addEventListener("click", () => open(panel.hidden));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") open(false); });
+    document.addEventListener("click", (e) => { if (!e.target.closest("#temi")) open(false); });
+
+    // I link interni mantengono il tema anche se il browser non salva nulla.
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a[href^='/']");
+      if (a && !a.closest("#temi") && !a.href.includes("tema=")) {
+        const url = new URL(a.href);
+        url.searchParams.set("tema", root.dataset.theme);
+        a.href = url;
+      }
+    });
+
+    show(root.dataset.theme);
+  })();
+</script>

@@ -14,13 +14,13 @@
     </a>
 
     {# Desktop: menu a tendina via :hover / :focus-within, senza JavaScript. #}
-    <nav aria-label="Menu principale" class="hidden lg:block">
+    <nav aria-label="Menu principale" class="hidden xl:block">
       <ul class="flex items-center">
         {%- for item in nav %}
         {%- set active = page.url == item.url %}
         {%- for child in item.children %}{% if child.url == page.url %}{% set active = true %}{% endif %}{% endfor %}
         <li class="group relative">
-          <a href="{{ item.url }}" class="smallcaps block px-2.5 py-3 whitespace-nowrap text-ink xl:px-3.5 hover:text-sienna {% if active %}text-sienna{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>
+          <a href="{{ item.url }}" class="smallcaps block px-2 py-3 whitespace-nowrap !tracking-[0.12em] text-ink 2xl:px-3.5 2xl:!tracking-[0.18em] hover:text-sienna {% if active %}text-sienna{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>
             {{ item.label }}
             <span class="mx-auto mt-1 block h-[2px] w-0 bg-saffron transition-all group-hover:w-full {% if active %}!w-full{% endif %}"></span>
           </a>
@@ -40,7 +40,7 @@
     </nav>
 
     {# Mobile: <details> apre/chiude il menu senza JavaScript. #}
-    <details class="group lg:hidden">
+    <details class="group xl:hidden">
       <summary class="smallcaps flex cursor-pointer list-none items-center gap-2 border-[1.5px] border-ink bg-saffron px-3 py-2 sm:px-4 text-ink [&::-webkit-details-marker]:hidden">
         <svg class="size-4 group-open:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="hidden size-4 group-open:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>

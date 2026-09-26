@@ -1,0 +1,13 @@
+---
+permalink: /css/themes.css
+eleventyExcludeFromCollections: true
+---
+{#- Un blocco di variabili per tema (dati in src/_data/themes.js). -#}
+{%- set map = { saffron: "saffron", saffronSoft: "saffron-soft", gold: "gold", ochre: "ochre", sienna: "sienna", umber: "umber", ink: "ink", inkSoft: "ink-soft", parchment: "parchment", cream: "cream", clay: "clay", clayDeep: "clay-deep" } -%}
+{%- for th in themes.list %}
+html[data-theme="{{ th.id }}"] {
+{%- for key, name in map %}
+  --color-{{ name }}: {{ th.colors[key] }};
+{%- endfor %}
+}
+{%- endfor %}

@@ -58,6 +58,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("abs", (url) => new URL(url || "/", site.url).href);
   // JSON sicuro dentro <script>: niente "</script>" nei contenuti.
   eleventyConfig.addFilter("jsonScript", (obj) => JSON.stringify(obj).replace(/</g, "\\u003c"));
+  eleventyConfig.addFilter("pluck", (arr, key) => arr.map((x) => x[key]));
   eleventyConfig.addFilter("merge", (a, b) => ({ ...a, ...b }));
   eleventyConfig.addFilter("isoDate", (d) => new Date(d).toISOString().slice(0, 10));
   eleventyConfig.addFilter("longDate", (d, lang = "it") => {
