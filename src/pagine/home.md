@@ -4,7 +4,21 @@ seoTitle: "Mario Lorenzetti – Respirazione Olotropica, seminari e counseling"
 description: "Mario Lorenzetti, formato con Stanislav Grof, facilita da oltre vent'anni seminari di Respirazione Olotropica a Torino e Milano. Counseling e sciamanismo."
 permalink: /
 translationKey: home
-heroTitle: "Respirazione Olotropica e ricerca interiore"
+heroKicker: "Mario Lorenzetti · da oltre 40 anni"
+heroTitle: "Respirazione Olotropica"
+heroTitleAccent: "e ricerca interiore"
+heroRing: "RESPIRAZIONE OLOTROPICA ✺ COUNSELING ✺ VIA SCIAMANICA ✺ ECOPSICOLOGIA ✺ "
+pathsTitle: "Tre sentieri"
+paths:
+  - title: "Respirazione Olotropica"
+    text: "Respiro, musica evocativa e ascolto del corpo per incontrare il guaritore interiore."
+    url: /respirazione-olotropica/
+  - title: "Counseling transpersonale"
+    text: "Una relazione d'aiuto non direttiva, che accoglie corpo, emozioni e stati di coscienza."
+    url: /counseling/
+  - title: "Via sciamanica"
+    text: "La Respirazione Olotropica come cerimonia, al centro della ruota di medicina."
+    url: /respirazione-olotropica-e-via-sciamanica/
 heroText: "Da più di 40 anni Mario Lorenzetti studia Grof, si occupa di respirazione olotropica e studia gli stati non ordinari di coscienza a scopo conoscitivo, di guarigione e di ricerca spirituale."
 heroImage: /wp-content/uploads/2022/06/mario-lorenzetti-docente-respirazione-olotropica.jpg
 heroImageAlt: "Mario Lorenzetti, facilitatore di Respirazione Olotropica"

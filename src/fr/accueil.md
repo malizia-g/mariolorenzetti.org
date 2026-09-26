@@ -5,7 +5,18 @@ description: "Mario Lorenzetti, formé par Stanislav Grof, pratique depuis plus 
 permalink: /fr/
 translationKey: home
 layout: layouts/home.njk
-heroTitle: "Respiration Holotropique et recherche intérieure"
+heroKicker: "Mario Lorenzetti · depuis plus de 40 ans"
+heroTitle: "Respiration Holotropique"
+heroTitleAccent: "et recherche intérieure"
+heroRing: "RESPIRATION HOLOTROPIQUE ✺ VOIE CHAMANIQUE ✺ CONSCIENCE ✺ RECHERCHE INTÉRIEURE ✺ "
+pathsTitle: "Deux chemins"
+paths:
+  - title: "Respiration Holotropique"
+    text: "Respiration, musique évocatrice et écoute du corps pour rencontrer le guérisseur intérieur."
+    url: /fr/respiration-holotropique/
+  - title: "Voie chamanique"
+    text: "La Respiration Holotropique comme cérémonie, au centre de la roue de médecine."
+    url: /fr/respiration-holotropique-et-voie-chamanique/
 heroText: "Depuis plus de 40 ans, Mario Lorenzetti pratique la Respiration Holotropique et étudie les états de conscience non ordinaires à des fins de recherche de soi, de connaissance, de soin et de quête spirituelle."
 heroImage: /wp-content/uploads/2022/06/mario-lorenzetti-docente-respirazione-olotropica.jpg
 heroImageAlt: "Mario Lorenzetti, facilitateur de Respiration Holotropique"

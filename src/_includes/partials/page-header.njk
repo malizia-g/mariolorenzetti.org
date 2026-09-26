@@ -1,0 +1,7 @@
+{#- Intestazione pagine interne: occhiello, titolo grande, ornamento a spirale. -#}
+<header class="mx-auto max-w-4xl px-4 pt-14 pb-10 text-center sm:px-6 md:pt-20">
+  {%- if kicker %}<p class="smallcaps text-sienna">{{ kicker | safe }}</p>{% endif %}
+  <h1 class="mt-4 text-[2.6rem] leading-[1.05] md:text-6xl">{{ heading or title }}</h1>
+  {%- if lead %}<p class="mx-auto mt-6 max-w-2xl text-xl text-ink-soft italic">{{ lead }}</p>{% endif %}
+  <div class="mt-8 flex justify-center">{% set ornamentClass = "h-7 w-24 text-ochre" %}{% include "partials/ornament.njk" %}</div>
+</header>

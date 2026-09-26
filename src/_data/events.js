@@ -57,6 +57,16 @@ function formatRange(start, end) {
   return `${ds} ${MONTHS[ms - 1]} ${ys} – ${de} ${MONTHS[me - 1]} ${ye}`;
 }
 
+// Per la grafica "agenda": giorni in grande, mese/anno in piccolo.
+function ledger(start, end) {
+  const [ys, ms, ds] = start.split("-").map(Number);
+  const [ye, me, de] = end.split("-").map(Number);
+  const short = (m) => MONTHS[m - 1].slice(0, 3);
+  const days = start === end ? `${ds}` : `${ds}–${de}`;
+  const month = ms === me ? `${MONTHS[ms - 1]} ${ys}` : `${short(ms)} – ${short(me)} ${ye}`;
+  return { days, month };
+}
+
 function normalize(rows) {
   const used = new Set();
   const events = [];
@@ -77,6 +87,7 @@ function normalize(rows) {
       slug,
       url: `/calendario/${year}/${slug}/`,
       dateLabel: formatRange(start, end),
+      ledger: ledger(start, end),
       time: r["orario"] || "",
       title: r["titolo"],
       type: r["tipo"] || "Seminario",

@@ -2,33 +2,75 @@
 layout: layouts/base.njk
 ---
 {%- set isFr = lang == "fr" -%}
-<section class="relative overflow-hidden bg-sand-100">
-  <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.3fr_1fr] md:py-20">
-    <div>
-      <p class="text-sm font-medium tracking-widest text-clay-600 uppercase">{{ "Respiration Holotropique · Voie chamanique" if isFr else "Respirazione Olotropica · Counseling · Sciamanismo" }}</p>
-      <h1 class="mt-4 text-4xl leading-[1.1] font-medium md:text-6xl">{{ heroTitle or title }}</h1>
+<section class="relative bg-saffron">
+  <div class="mx-auto grid max-w-7xl items-center gap-8 px-4 pt-8 pb-20 sm:px-6 md:grid-cols-[1.15fr_1fr] md:pt-16 md:pb-28">
+    <div class="relative z-10">
+      <p class="smallcaps text-umber">{{ heroKicker }}</p>
+      <h1 class="mt-5 text-[2.9rem] leading-[1.02] sm:text-6xl lg:text-[5.2rem]">
+        {{ heroTitle or title }}
+        {%- if heroTitleAccent %} <em class="block font-serif font-light text-umber italic">{{ heroTitleAccent }}</em>{% endif %}
+      </h1>
       {%- if heroText %}
-      <p class="mt-6 max-w-xl text-lg text-ink-soft">{{ heroText }}</p>
+      <p class="mt-7 max-w-xl text-xl leading-relaxed text-ink/85">{{ heroText }}</p>
       {%- endif %}
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="{{ '/fr/stages/' if isFr else '/calendario/' }}" class="btn-primary">{{ "Prochains stages" if isFr else "Prossimi seminari" }}</a>
+      <div class="mt-9 flex flex-wrap gap-4">
+        <a href="{{ '/fr/stages/' if isFr else '/calendario/' }}" class="btn bg-ink text-saffron [box-shadow:4px_4px_0_var(--color-cream)] hover:[box-shadow:6px_6px_0_var(--color-cream)]">{{ "Prochains stages" if isFr else "Prossimi seminari" }} →</a>
         <a href="{{ '/fr/respiration-holotropique/' if isFr else '/respirazione-olotropica/' }}" class="btn-ghost">{{ "Qu'est-ce que c'est ?" if isFr else "Cos'è la Respirazione Olotropica" }}</a>
       </div>
     </div>
-    {%- if heroImage %}
-    <div class="mx-auto w-64 md:w-full md:max-w-sm">
-      <img src="{{ heroImage }}" alt="{{ heroImageAlt or 'Mario Lorenzetti' }}" class="aspect-[3/4] w-full rounded-[2rem] object-cover shadow-xl" loading="eager" fetchpriority="high" sizes="(min-width: 768px) 384px, 256px">
+
+    {# L'albero nel cerchio: "respira" lentamente, con una scritta che ruota intorno. #}
+    <div class="relative order-first mx-auto aspect-square w-full max-w-[16rem] sm:max-w-[24rem] md:order-none md:max-w-[32rem]">
+      <svg viewBox="0 0 500 500" class="absolute inset-0 size-full animate-spin-slow text-ink" aria-hidden="true">
+        <defs><path id="anello" d="M250,250 m-232,0 a232,232 0 1,1 464,0 a232,232 0 1,1 -464,0"/></defs>
+        <text class="font-display" font-size="19" fill="currentColor"><textPath href="#anello" textLength="1455" lengthAdjust="spacing">{{ heroRing }}</textPath></text>
+      </svg>
+      <div class="absolute inset-[10%] animate-breathe overflow-hidden rounded-full border-[3px] border-ink shadow-[0_0_0_10px_var(--color-saffron),0_0_0_11.5px_var(--color-ink)]">
+        <img src="/assets/albero.jpg" alt="{{ 'L\'arbre de vie, logo de Mario Lorenzetti' if isFr else 'L\'albero della vita, logo di Mario Lorenzetti' }}" loading="eager" fetchpriority="high" sizes="(min-width: 768px) 420px, 80vw" class="size-full object-cover">
+      </div>
     </div>
-    {%- endif %}
   </div>
+  {# Un respiro: onda che separa la sezione. #}
+  <svg class="absolute inset-x-0 -bottom-px h-10 w-full text-ink md:h-14" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 30 C 180 0, 360 60, 540 30 S 900 0, 1080 30 S 1300 55, 1440 25 V60 H0 Z" fill="currentColor"/>
+  </svg>
 </section>
 
 {%- if not isFr %}
 {% include "partials/upcoming.njk" %}
 {%- endif %}
 
-<article class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-  <div class="prose-site">
-    {{ content | safe }}
+{%- if paths %}
+<section class="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+  <div class="flex flex-col items-center text-center">
+    {% set ornamentClass = "h-7 w-24 text-sienna" %}{% include "partials/ornament.njk" %}
+    <h2 class="mt-4 text-4xl md:text-5xl">{{ pathsTitle }}</h2>
   </div>
-</article>
+  <ul class="mt-12 grid gap-8 md:grid-cols-3">
+    {%- for p in paths %}
+    <li>
+      <a href="{{ p.url }}" class="group flex h-full flex-col rounded-t-full border-[1.5px] border-ink bg-cream px-8 pt-16 pb-8 text-center shadow-[6px_6px_0_var(--color-ochre)] transition hover:-translate-y-1 hover:bg-saffron-soft">
+        <span class="font-display text-5xl text-ochre transition group-hover:text-sienna">{{ ["I", "II", "III", "IV"][loop.index0] }}</span>
+        <h3 class="mt-5 text-2xl">{{ p.title }}</h3>
+        <p class="mt-3 text-ink-soft italic">{{ p.text }}</p>
+        <span class="smallcaps mt-auto pt-6 text-sienna">{{ "Découvrir" if isFr else "Scopri" }} →</span>
+      </a>
+    </li>
+    {%- endfor %}
+  </ul>
+</section>
+{%- endif %}
+
+<section class="border-t border-ink/15">
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 md:grid-cols-[20rem_1fr] lg:gap-20">
+    {%- if heroImage %}
+    <figure class="mx-auto w-64 md:sticky md:top-28 md:w-full md:self-start">
+      <img src="{{ heroImage }}" alt="{{ heroImageAlt or 'Mario Lorenzetti' }}" sizes="(min-width: 768px) 320px, 256px" class="w-full -rotate-2 border-[1.5px] border-ink bg-cream p-3 pb-12 shadow-[8px_8px_0_var(--color-saffron)]">
+      <figcaption class="-mt-10 -rotate-2 text-center font-display text-lg text-ink">Mario Lorenzetti</figcaption>
+    </figure>
+    {%- endif %}
+    <div class="prose-site dropcap max-w-3xl min-w-0">
+      {{ content | safe }}
+    </div>
+  </div>
+</section>

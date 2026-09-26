@@ -1,9 +1,12 @@
-{%- set isPast = ev.end < build.today -%}
-<a href="{{ ev.url }}" class="group flex h-full flex-col rounded-2xl border border-sand-200 bg-sand-50 p-5 transition hover:border-moss-500/40 hover:shadow-md {% if isPast %}opacity-80{% endif %}">
-  <p class="text-sm font-medium text-clay-600"><time datetime="{{ ev.start }}">{{ ev.dateLabel }}</time></p>
-  <h3 class="mt-2 font-serif text-xl leading-snug text-moss-900 group-hover:text-moss-600">{{ ev.title }}</h3>
-  <p class="mt-2 text-sm text-ink-soft">
-    {{ ev.city }}{% if ev.venue %} · {{ ev.venue }}{% endif %}
+{#- Evento in stile agenda: giorni in grande, mese in maiuscoletto. `dark` = su fondo scuro. -#}
+<a href="{{ ev.url }}" class="group block h-full px-1 py-8 md:px-8 {% if loop and loop.first %}md:pl-0{% endif %}">
+  <p class="flex items-baseline gap-3">
+    <span class="font-display text-6xl leading-none {{ 'text-saffron' if dark else 'text-sienna' }}">{{ ev.ledger.days }}</span>
+    <span class="smallcaps {{ 'text-gold' if dark else 'text-umber' }}">{{ ev.ledger.month }}</span>
   </p>
-  <p class="mt-auto pt-4 text-xs font-medium tracking-wide text-ink-soft uppercase">{{ ev.type }}{% if ev.with %} · con {{ ev.with }}{% endif %}</p>
+  <h3 class="mt-4 text-2xl leading-snug {{ 'text-cream' if dark else 'text-ink' }} decoration-saffron decoration-2 underline-offset-4 group-hover:underline">{{ ev.title }}</h3>
+  <p class="mt-2 {{ 'text-gold/80' if dark else 'text-ink-soft' }} italic">
+    {{ ev.city }}{% if ev.venue %} · {{ ev.venue }}{% endif %}{% if ev.with %} — con {{ ev.with }}{% endif %}
+  </p>
+  <p class="smallcaps mt-4 {{ 'text-gold/60' if dark else 'text-umber' }}">{{ ev.type }}</p>
 </a>

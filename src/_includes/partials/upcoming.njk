@@ -1,15 +1,15 @@
-{#- Prossime date: verrà alimentato dal Google Sheet (events.upcoming). -#}
+{#- Prossime date (dal Google Sheet) su fondo scuro, come un'agenda. -#}
 {%- set list = (events.upcoming if events and events.upcoming else []) | batch(3) | first -%}
 {%- if list and list.length %}
-<section class="border-y border-sand-200 bg-white">
-  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-    <div class="flex items-end justify-between gap-4">
-      <h2 class="text-3xl font-medium">{{ i18n[lang].upcoming }}</h2>
-      <a href="/calendario/" class="text-sm font-medium text-moss-600 hover:underline">{{ i18n[lang].allDates }} →</a>
+<section class="bg-ink text-cream">
+  <div class="mx-auto max-w-7xl px-4 pt-14 pb-20 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-4 border-b border-gold/25 pb-5">
+      <h2 class="text-4xl text-cream md:text-5xl">{{ i18n[lang].upcoming }}</h2>
+      <a href="/calendario/" class="smallcaps text-saffron hover:underline">{{ i18n[lang].allDates }} →</a>
     </div>
-    <ul class="mt-8 grid gap-5 md:grid-cols-3">
+    <ul class="grid md:grid-cols-3 md:divide-x md:divide-gold/25">
       {%- for ev in list %}
-      <li>{% include "partials/event-card.njk" %}</li>
+      <li class="border-b border-gold/25 md:border-b-0">{% set dark = true %}{% include "partials/event-card.njk" %}</li>
       {%- endfor %}
     </ul>
   </div>

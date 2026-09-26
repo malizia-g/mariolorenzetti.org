@@ -2,93 +2,144 @@
 @plugin "@tailwindcss/typography";
 @source "../../src/**/*.{njk,md,html,js}";
 
+/* Titoli: Young Serif (morbido, "dipinto"). Testo: Newsreader (editoriale, da libro). */
 @font-face {
-  font-family: "Fraunces";
-  src: url("../assets/fonts/fraunces-latin-wght-normal.woff2") format("woff2");
-  font-weight: 300 900;
+  font-family: "Young Serif";
+  src: url("../assets/fonts/young-serif-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Newsreader";
+  src: url("../assets/fonts/newsreader-latin-wght-normal.woff2") format("woff2");
+  font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Fraunces";
-  src: url("../assets/fonts/fraunces-latin-wght-italic.woff2") format("woff2");
-  font-weight: 300 900;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Inter";
-  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Inter";
-  src: url("../assets/fonts/inter-latin-wght-italic.woff2") format("woff2");
-  font-weight: 100 900;
+  font-family: "Newsreader";
+  src: url("../assets/fonts/newsreader-latin-wght-italic.woff2") format("woff2");
+  font-weight: 200 800;
   font-style: italic;
   font-display: swap;
 }
 
+/* Palette presa dal dipinto dell'albero (logo): zafferano, ocra, oro, terra di Siena, seppia, nero dei rami. */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --font-display: "Young Serif", "Georgia", serif;
+  --font-serif: "Newsreader", "Georgia", serif;
+  --font-sans: "Newsreader", "Georgia", serif;
 
-  --color-sand-50: #fbf8f3;
-  --color-sand-100: #f4eee4;
-  --color-sand-200: #e8dfd0;
-  --color-ink: #1f2826;
-  --color-ink-soft: #4a5553;
-  --color-moss-500: #4d6f5f;
-  --color-moss-600: #3d5b4e;
-  --color-moss-700: #2f473d;
-  --color-moss-900: #1b2a24;
-  --color-clay-500: #b4633a;
-  --color-clay-600: #97502e;
+  --color-saffron: #fabc33;
+  --color-saffron-soft: #fde2a0;
+  --color-gold: #e3c585;
+  --color-ochre: #c9a35f;
+  --color-sienna: #a24f28;
+  --color-umber: #6c472a;
+  --color-ink: #241b13;
+  --color-ink-soft: #5c4a3a;
+  --color-parchment: #f7eedc;
+  --color-cream: #fcf7ec;
+
+  --animate-spin-slow: spin 90s linear infinite;
+  --animate-breathe: breathe 9s ease-in-out infinite;
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    45% { transform: scale(1.035); }
+  }
 }
 
 @layer base {
   html {
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 6rem;
   }
   body {
-    @apply bg-sand-50 text-ink font-sans antialiased;
+    @apply bg-parchment font-serif text-[1.125rem] leading-relaxed text-ink antialiased;
+    /* Grana leggera da carta. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .28 0 0 0 0 .16 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  h1, h2, h3, h4 {
-    @apply font-serif text-moss-900;
+  h1, h2, h3 {
+    @apply font-display font-normal text-ink;
     text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    @apply bg-saffron text-ink;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-clay-500;
+    @apply outline-2 outline-offset-4 outline-sienna;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
   }
 }
 
 @layer components {
   .prose-site {
-    @apply prose prose-lg max-w-none
-      prose-headings:font-serif prose-headings:font-medium prose-headings:text-moss-900
-      prose-a:text-moss-600 prose-a:decoration-moss-500/40 prose-a:underline-offset-2 hover:prose-a:text-clay-600
-      prose-strong:text-ink
-      prose-blockquote:border-l-clay-500 prose-blockquote:bg-sand-100 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:font-normal
-      prose-img:rounded-xl prose-img:shadow-sm;
+    @apply prose prose-lg max-w-none font-serif text-ink
+      prose-headings:font-display prose-headings:font-normal prose-headings:text-ink
+      prose-h2:mt-14 prose-h2:text-3xl
+      prose-h3:text-2xl prose-h4:font-serif prose-h4:italic prose-h4:text-xl prose-h4:text-umber
+      prose-a:text-sienna prose-a:decoration-sienna/40 prose-a:decoration-1 prose-a:underline-offset-4 hover:prose-a:decoration-sienna
+      prose-strong:text-ink prose-strong:font-semibold
+      prose-li:marker:text-ochre
+      prose-img:rounded-sm;
+    overflow-wrap: break-word;
+    --tw-prose-body: var(--color-ink);
+    --tw-prose-quotes: var(--color-umber);
+    --tw-prose-hr: var(--color-ochre);
   }
-  .prose-site blockquote p:first-of-type::before,
-  .prose-site blockquote p:last-of-type::after {
+  /* Capolettera sul primo paragrafo, come in un libro. */
+  .prose-site.dropcap > p:first-child::first-letter {
+    @apply float-left mt-1 mr-3 font-display text-sienna;
+    font-size: 4.4em;
+    line-height: 0.8;
+  }
+  .prose-site blockquote {
+    @apply border-l-0 font-serif text-xl not-italic text-umber;
+    position: relative;
+    padding-left: 2.25rem;
+  }
+  .prose-site blockquote::before {
+    content: "“";
+    @apply absolute top-0 left-0 font-display text-6xl leading-none text-saffron;
+  }
+  .prose-site blockquote p::before,
+  .prose-site blockquote p::after {
     content: none;
   }
   .prose-site video,
   .prose-site audio {
-    @apply w-full rounded-lg;
+    @apply w-full;
+  }
+  .prose-site picture img,
+  .prose-site > p > img {
+    @apply border border-ochre/50 bg-cream p-2 shadow-[6px_6px_0_var(--color-saffron-soft)];
   }
 }
 
+/* Bottoni "a timbro": rettangolari, bordo inchiostro, ombra piena che si sposta al passaggio. */
 @utility btn {
-  @apply inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors;
+  @apply inline-flex items-center gap-2 border-[1.5px] border-ink px-5 py-2.5 font-serif text-[0.95rem] font-semibold tracking-wide transition-[transform,box-shadow] duration-150;
+  box-shadow: 4px 4px 0 var(--color-ink);
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--color-ink);
+  }
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--color-ink);
+  }
 }
 @utility btn-primary {
-  @apply btn bg-moss-600 text-white hover:bg-moss-700;
+  @apply btn bg-saffron text-ink;
 }
 @utility btn-ghost {
-  @apply btn border border-moss-600/30 text-moss-700 hover:bg-sand-100;
+  @apply btn bg-cream text-ink;
+}
+@utility smallcaps {
+  @apply font-serif text-[0.8rem] font-semibold tracking-[0.18em] uppercase;
 }

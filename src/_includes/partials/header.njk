@@ -2,57 +2,65 @@
 {%- set homeUrl = "/fr/" if lang == "fr" else "/" -%}
 {%- set otherLang = null -%}
 {%- for alt in alternates %}{% if alt.data.lang != lang %}{% set otherLang = alt.url %}{% endif %}{% endfor -%}
-<header class="sticky top-0 z-40 border-b border-sand-200 bg-sand-50/90 backdrop-blur">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-3 sm:px-6">
-    <a href="{{ homeUrl }}" class="group flex flex-col leading-tight">
-      <span class="font-serif text-xl font-semibold text-moss-900 group-hover:text-moss-600">Mario Lorenzetti</span>
-      <span class="text-xs tracking-wide text-ink-soft uppercase">{{ "Respiration Holotropique" if lang == "fr" else "Respirazione Olotropica" }}</span>
+{%- set otherHref = otherLang or ('/' if lang == 'fr' else '/fr/') -%}
+<header class="sticky top-0 z-40 border-b border-ink/15 bg-parchment/92 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2.5 sm:gap-6 sm:px-6">
+    <a href="{{ homeUrl }}" class="group flex shrink-0 items-center gap-3 whitespace-nowrap">
+      <img src="/assets/albero.jpg" eleventy:widths="96" sizes="48px" alt="" width="48" height="48" loading="eager" class="size-10 rounded-full ring-2 sm:size-12 ring-saffron ring-offset-2 ring-offset-parchment transition-transform duration-700 group-hover:rotate-12">
+      <span class="leading-none">
+        <span class="block font-display text-lg text-ink sm:text-[1.35rem]">Mario Lorenzetti</span>
+        <span class="smallcaps mt-1 block !text-[0.6rem] !tracking-[0.12em] text-umber sm:!text-[0.68rem] sm:!tracking-[0.18em]">{{ "Respiration Holotropique" if lang == "fr" else "Respirazione Olotropica" }}</span>
+      </span>
     </a>
 
     {# Desktop: menu a tendina via :hover / :focus-within, senza JavaScript. #}
     <nav aria-label="Menu principale" class="hidden lg:block">
-      <ul class="flex items-center gap-1 text-[0.95rem]">
+      <ul class="flex items-center">
         {%- for item in nav %}
+        {%- set active = page.url == item.url %}
+        {%- for child in item.children %}{% if child.url == page.url %}{% set active = true %}{% endif %}{% endfor %}
         <li class="group relative">
-          <a href="{{ item.url }}" class="block rounded-full px-3 py-2 hover:bg-sand-100 {% if page.url == item.url %}text-moss-600 font-medium{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>{{ item.label }}</a>
+          <a href="{{ item.url }}" class="smallcaps block px-2.5 py-3 whitespace-nowrap text-ink xl:px-3.5 hover:text-sienna {% if active %}text-sienna{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>
+            {{ item.label }}
+            <span class="mx-auto mt-1 block h-[2px] w-0 bg-saffron transition-all group-hover:w-full {% if active %}!w-full{% endif %}"></span>
+          </a>
           {%- if item.children %}
-          <ul class="invisible absolute left-0 top-full min-w-72 translate-y-1 rounded-xl border border-sand-200 bg-white p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+          <ul class="invisible absolute top-full left-0 min-w-80 border-[1.5px] border-ink bg-cream p-2 opacity-0 shadow-[6px_6px_0_var(--color-ink)] transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
             {%- for child in item.children %}
-            <li><a href="{{ child.url }}" class="block rounded-lg px-3 py-2 text-sm hover:bg-sand-100 {% if page.url == child.url %}text-moss-600 font-medium{% endif %}">{{ child.label }}</a></li>
+            <li><a href="{{ child.url }}" class="block px-3 py-2 text-[1.02rem] hover:bg-saffron-soft {% if page.url == child.url %}text-sienna{% endif %}">{{ child.label }}</a></li>
             {%- endfor %}
           </ul>
           {%- endif %}
         </li>
         {%- endfor %}
-        <li class="ml-2">
-          <a href="{{ otherLang or ('/' if lang == 'fr' else '/fr/') }}" hreflang="{{ 'it' if lang == 'fr' else 'fr' }}" class="rounded-full border border-sand-200 px-3 py-1.5 text-xs font-medium uppercase tracking-wide hover:bg-sand-100">{{ "IT" if lang == "fr" else "FR" }}</a>
+        <li class="ml-3">
+          <a href="{{ otherHref }}" hreflang="{{ 'it' if lang == 'fr' else 'fr' }}" class="smallcaps grid size-10 place-items-center rounded-full border-[1.5px] border-ink text-ink hover:bg-saffron" title="{{ i18n[lang].otherLang }}">{{ "IT" if lang == "fr" else "FR" }}</a>
         </li>
       </ul>
     </nav>
 
     {# Mobile: <details> apre/chiude il menu senza JavaScript. #}
     <details class="group lg:hidden">
-      <summary class="flex cursor-pointer list-none items-center gap-2 rounded-full border border-sand-200 px-4 py-2 text-sm font-medium [&::-webkit-details-marker]:hidden">
-        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-        {{ i18n[lang].menu }}
+      <summary class="smallcaps flex cursor-pointer list-none items-center gap-2 border-[1.5px] border-ink bg-saffron px-3 py-2 sm:px-4 text-ink [&::-webkit-details-marker]:hidden">
+        <svg class="size-4 group-open:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="hidden size-4 group-open:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        <span class="sr-only sm:not-sr-only">{{ i18n[lang].menu }}</span>
       </summary>
-      <nav aria-label="Menu principale" class="absolute inset-x-0 top-full max-h-[80vh] overflow-y-auto border-b border-sand-200 bg-sand-50 px-4 pb-6 shadow-lg">
-        <ul class="divide-y divide-sand-200">
+      <nav aria-label="Menu principale" class="absolute inset-x-0 top-full max-h-[85vh] overflow-y-auto border-b-[1.5px] border-ink bg-saffron px-5 pb-8">
+        <ul>
           {%- for item in nav %}
-          <li class="py-2">
-            <a href="{{ item.url }}" class="block py-1 font-serif text-lg text-moss-900">{{ item.label }}</a>
+          <li class="border-b border-ink/20 py-3">
+            <a href="{{ item.url }}" class="block font-display text-2xl text-ink">{{ item.label }}</a>
             {%- if item.children %}
-            <ul class="mt-1 space-y-1 pl-4">
+            <ul class="mt-2 space-y-1 border-l-2 border-ink/30 pl-4">
               {%- for child in item.children %}
-              <li><a href="{{ child.url }}" class="block py-1 text-ink-soft">{{ child.label }}</a></li>
+              <li><a href="{{ child.url }}" class="block py-0.5 text-lg text-ink/85">{{ child.label }}</a></li>
               {%- endfor %}
             </ul>
             {%- endif %}
           </li>
           {%- endfor %}
-          <li class="py-3">
-            <a href="{{ otherLang or ('/' if lang == 'fr' else '/fr/') }}" class="text-sm font-medium">{{ i18n[lang].otherLang }}</a>
-          </li>
+          <li class="pt-4"><a href="{{ otherHref }}" class="smallcaps text-ink">→ {{ i18n[lang].otherLang }}</a></li>
         </ul>
       </nav>
     </details>
