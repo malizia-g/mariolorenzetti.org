@@ -77,7 +77,7 @@ export default function (eleventyConfig) {
     dir: { input: "src", output: "_site", includes: "_includes", data: "_data" },
     markdownTemplateEngine: false,
     htmlTemplateEngine: "njk",
-    templateFormats: ["md", "njk", "html"],
+    templateFormats: ["md", "njk", "html", "11ty.js"],
     pathPrefix: process.env.PATH_PREFIX || "/",
   };
 }

@@ -2,7 +2,9 @@
 // Tutte le chiamate passano da api.php, che parla con GitHub.
 (() => {
   const $ = (id) => document.getElementById(id);
-  const SITE = "https://mariolorenzetti.org";
+  let SITE = "https://mariolorenzetti.org";
+  // Modalità demo (GitHub Pages, senza backend): contenuti da demo.json, salvataggi nel browser.
+  let demo = null;
   // Campi del frontmatter modificabili dal modulo; gli altri restano intatti.
   const FIELDS = ["title", "seoTitle", "description", "image", "date"];
   let csrf = "";
@@ -11,6 +13,7 @@
   let mde;
 
   async function api(action, { method = "GET", body, query = "" } = {}) {
+    if (demo) return demoApi(action, body, query);
     const res = await fetch(`api.php?action=${action}${query}`, {
       method,
       headers: { "Content-Type": "application/json", "X-CSRF": csrf },
@@ -21,6 +24,55 @@
     if (res.status === 401 && action !== "login") showLogin();
     if (!res.ok) throw new Error(data.error || `Errore ${res.status}`);
     return data;
+  }
+
+  async function loadDemo() {
+    try {
+      const res = await fetch("demo.json", { cache: "no-store" });
+      if (!res.ok) return null;
+      const data = await res.json();
+      SITE = location.origin + location.pathname.replace(/admin\/.*$/, "").replace(/\/$/, "");
+      const banner = document.createElement("p");
+      banner.style.cssText = "margin:0;padding:.6rem 1rem;background:#b4633a;color:#fff;text-align:center;font-size:.9rem";
+      banner.textContent = "Versione dimostrativa: puoi provare tutto, ma le modifiche restano solo in questo browser e il sito non cambia. Nella versione vera si entra con l'account Google.";
+      document.body.prepend(banner);
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  async function demoApi(action, body, query) {
+    const key = (path) => "demo:" + path;
+    const read = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+    switch (action) {
+      case "me":
+        return { email: "demo", csrf: "", sheetUrl: "https://github.com/malizia-g/mariolorenzetti.org/blob/main/data/eventi.csv", siteUrl: SITE + "/" };
+      case "list":
+        return { files: demo.files.map(({ path, name, section }) => ({ path, name, section })) };
+      case "get": {
+        const path = new URLSearchParams(query).get("path");
+        const file = demo.files.find((f) => f.path === path);
+        return { path, sha: "demo", content: read(key(path)) ?? file.content };
+      }
+      case "save": {
+        try { localStorage.setItem(key(body.path), body.content); } catch {}
+        if (!demo.files.some((f) => f.path === body.path)) {
+          const name = body.path.split("/").pop();
+          demo.files.push({ path: body.path, name, section: "Scritti", content: body.content });
+        }
+        await new Promise((r) => setTimeout(r, 600));
+        return { path: body.path, sha: "demo" };
+      }
+      case "upload": {
+        const blob = await (await fetch("data:image/jpeg;base64," + body.data)).blob();
+        return { url: URL.createObjectURL(blob) };
+      }
+      case "status":
+        return { status: "completed", conclusion: "success", updated: new Date().toISOString() };
+      default:
+        return { ok: true };
+    }
   }
 
   function toast(text, isError = false) {
@@ -89,6 +141,7 @@
   }
 
   async function start() {
+    demo = demo ?? (await loadDemo());
     const me = await api("me");
     if (!me.email) return showLogin();
     csrf = me.csrf;
@@ -199,8 +252,12 @@
         await loadList();
       }
       dirty = false;
-      toast("Salvato. Il sito si aggiorna in 2-3 minuti.");
-      pollStatus(true);
+      if (demo) {
+        toast("Salvato (demo): nella versione vera il sito si aggiornerebbe in 2-3 minuti.");
+      } else {
+        toast("Salvato. Il sito si aggiorna in 2-3 minuti.");
+        pollStatus(true);
+      }
     } catch (err) {
       toast(err.message, true);
     } finally {
@@ -295,6 +352,7 @@
     catch (e) { toast(e.message, true); }
   };
   $("publish").onclick = async () => {
+    if (demo) return toast("Demo: qui si rigenererebbe il sito leggendo le date dal Google Sheet.");
     try { await api("publish", { method: "POST" }); toast("Aggiornamento avviato: 2-3 minuti."); pollStatus(true); }
     catch (e) { toast(e.message, true); }
   };
