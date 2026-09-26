@@ -20,7 +20,7 @@
         {%- set active = page.url == item.url %}
         {%- for child in item.children %}{% if child.url == page.url %}{% set active = true %}{% endif %}{% endfor %}
         <li class="group relative">
-          <a href="{{ item.url }}" class="smallcaps block px-1.5 py-3 whitespace-nowrap !text-[0.74rem] !tracking-[0.08em] text-ink xl:px-2 xl:!text-[0.8rem] xl:!tracking-[0.12em] 2xl:px-3.5 2xl:!tracking-[0.18em] hover:text-sienna {% if active %}text-sienna{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>
+          <a href="{{ item.url }}" class="block px-2.5 py-3 font-serif text-[1.03rem] font-medium whitespace-nowrap text-ink xl:px-4 xl:text-[1.1rem] hover:text-sienna {% if active %}text-sienna{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>
             {{ item.label }}
             <span class="mx-auto mt-1 block h-[2px] w-0 bg-saffron transition-all group-hover:w-full {% if active %}!w-full{% endif %}"></span>
           </a>
@@ -33,7 +33,7 @@
           {%- endif %}
         </li>
         {%- endfor %}
-        <li class="ml-2 xl:ml-3">
+        <li class="ml-2 xl:ml-4">
           <a href="{{ otherHref }}" hreflang="{{ 'it' if lang == 'fr' else 'fr' }}" class="smallcaps grid size-10 place-items-center rounded-full border-[1.5px] border-ink text-ink hover:bg-saffron" title="{{ i18n[lang].otherLang }}">{{ "IT" if lang == "fr" else "FR" }}</a>
         </li>
       </ul>
