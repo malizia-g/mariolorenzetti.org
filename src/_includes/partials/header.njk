@@ -3,7 +3,7 @@
 {%- set otherLang = null -%}
 {%- for alt in alternates %}{% if alt.data.lang != lang %}{% set otherLang = alt.url %}{% endif %}{% endfor -%}
 {%- set otherHref = otherLang or ('/' if lang == 'fr' else '/fr/') -%}
-<header id="testata" class="group/header sticky top-0 z-40 border-b border-ink/15 bg-parchment/92 backdrop-blur-sm">
+<header class="sticky top-0 z-40 border-b border-ink/15 bg-parchment/92 backdrop-blur-sm">
   <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2.5 sm:gap-6 sm:px-6">
     <a href="{{ homeUrl }}" class="group flex shrink-0 items-center gap-3 whitespace-nowrap">
       <img src="/assets/albero.jpg" eleventy:widths="96" sizes="48px" alt="" width="48" height="48" loading="eager" class="size-10 rounded-full ring-2 sm:size-12 lg:size-10 xl:size-12 ring-saffron ring-offset-2 ring-offset-parchment transition-transform duration-700 group-hover:rotate-12">
@@ -14,13 +14,13 @@
     </a>
 
     {# Desktop: menu a tendina via :hover / :focus-within, senza JavaScript. #}
-    <nav aria-label="Menu principale" class="hidden transition duration-300 lg:block group-data-compact/header:invisible group-data-compact/header:-translate-y-2 group-data-compact/header:opacity-0">
+    <nav aria-label="Menu principale" class="hidden lg:block">
       <ul class="flex items-center">
         {%- for item in nav %}
         {%- set active = page.url == item.url %}
         {%- for child in item.children %}{% if child.url == page.url %}{% set active = true %}{% endif %}{% endfor %}
         <li class="group relative">
-          <a href="{{ item.url }}" class="block px-2.5 py-3 font-serif text-[1.03rem] font-medium whitespace-nowrap text-ink xl:px-4 xl:text-[1.1rem] hover:text-sienna {% if active %}text-sienna{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>
+          <a href="{{ item.url }}" class="block px-2.5 py-3 font-serif text-[1.03rem] font-medium whitespace-nowrap text-ink xl:px-5 xl:text-[1.1rem] 2xl:px-6 hover:text-sienna {% if active %}text-sienna{% endif %}" {% if page.url == item.url %}aria-current="page"{% endif %}>
             {{ item.label }}
             <span class="mx-auto mt-1 block h-[2px] w-0 bg-saffron transition-all group-hover:w-full {% if active %}!w-full{% endif %}"></span>
           </a>
@@ -33,14 +33,14 @@
           {%- endif %}
         </li>
         {%- endfor %}
-        <li class="ml-2 xl:ml-4">
+        <li class="ml-2 xl:ml-5">
           <a href="{{ otherHref }}" hreflang="{{ 'it' if lang == 'fr' else 'fr' }}" class="smallcaps grid size-10 place-items-center rounded-full border-[1.5px] border-ink text-ink hover:bg-saffron" title="{{ i18n[lang].otherLang }}">{{ "IT" if lang == "fr" else "FR" }}</a>
         </li>
       </ul>
     </nav>
 
     {# Mobile: <details> apre/chiude il menu senza JavaScript. #}
-    <details class="group transition duration-300 lg:hidden group-data-compact/header:not-open:invisible group-data-compact/header:not-open:-translate-y-2 group-data-compact/header:not-open:opacity-0">
+    <details class="group lg:hidden">
       <summary class="smallcaps flex cursor-pointer list-none items-center gap-2 border-[1.5px] border-ink bg-saffron px-3 py-2 sm:px-4 text-ink [&::-webkit-details-marker]:hidden">
         <svg class="size-4 group-open:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="hidden size-4 group-open:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -66,18 +66,3 @@
     </details>
   </div>
 </header>
-<script>
-  // Scorrendo in basso resta solo il logo; risalendo torna il menu.
-  (() => {
-    const header = document.getElementById("testata");
-    let last = scrollY;
-    addEventListener("scroll", () => {
-      const y = scrollY;
-      if (Math.abs(y - last) < 8) return;
-      // Non nascondere mentre il menu è aperto o lo si usa da tastiera.
-      const busy = header.querySelector("details[open], :focus-visible");
-      header.toggleAttribute("data-compact", y > last && y > 120 && !busy);
-      last = y;
-    }, { passive: true });
-  })();
-</script>
