@@ -14,7 +14,7 @@ layout: layouts/base.njk
       <p class="mt-7 max-w-xl text-xl leading-relaxed text-ink/85">{{ heroText }}</p>
       {%- endif %}
       <div class="mt-9 flex flex-wrap gap-4">
-        <a href="{{ '/fr/stages/' if isFr else '/calendario/' }}" class="btn bg-ink text-saffron [box-shadow:4px_4px_0_var(--color-cream)] hover:[box-shadow:6px_6px_0_var(--color-cream)]">{{ "Prochains stages" if isFr else "Prossimi seminari" }} →</a>
+        <a href="{{ '/fr/stages/' if isFr else '/calendario/' }}" class="btn bg-clay text-cream">{{ "Prochains stages" if isFr else "Prossimi seminari" }} →</a>
         <a href="{{ '/fr/respiration-holotropique/' if isFr else '/respirazione-olotropica/' }}" class="btn-ghost">{{ "Qu'est-ce que c'est ?" if isFr else "Cos'è la Respirazione Olotropica" }}</a>
       </div>
     </div>
@@ -31,7 +31,7 @@ layout: layouts/base.njk
     </div>
   </div>
   {# Un respiro: onda che separa la sezione. #}
-  <svg class="absolute inset-x-0 -bottom-px h-10 w-full text-ink md:h-14" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+  <svg class="absolute inset-x-0 -bottom-px h-10 w-full text-clay md:h-14" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
     <path d="M0 30 C 180 0, 360 60, 540 30 S 900 0, 1080 30 S 1300 55, 1440 25 V60 H0 Z" fill="currentColor"/>
   </svg>
 </section>

@@ -3,15 +3,15 @@ layout: layouts/base.njk
 ---
 {% include "partials/page-header.njk" %}
 
-<section class="bg-ink text-cream" aria-labelledby="prossime">
+<section class="bg-clay text-cream" aria-labelledby="prossime">
   <div class="mx-auto max-w-7xl px-4 pt-12 pb-16 sm:px-6">
-    <h2 id="prossime" class="border-b border-gold/25 pb-5 text-4xl text-cream">{{ i18n[lang].upcoming }}</h2>
+    <h2 id="prossime" class="border-b border-cream/25 pb-5 text-4xl text-cream">{{ i18n[lang].upcoming }}</h2>
     {%- if events.upcoming.length %}
-    <ul class="grid md:grid-cols-3 md:divide-x md:divide-gold/25">
-      {%- for ev in events.upcoming %}<li class="border-b border-gold/25 md:border-b-0">{% set dark = true %}{% include "partials/event-card.njk" %}</li>{% endfor %}
+    <ul class="grid md:grid-cols-3 md:divide-x md:divide-cream/25">
+      {%- for ev in events.upcoming %}<li class="border-b border-cream/25 md:border-b-0">{% set dark = true %}{% include "partials/event-card.njk" %}</li>{% endfor %}
     </ul>
     {%- else %}
-    <p class="mt-6 text-gold italic">Le nuove date saranno pubblicate a breve. Iscriviti alla newsletter per essere avvisato.</p>
+    <p class="mt-6 text-saffron-soft italic">Le nuove date saranno pubblicate a breve. Iscriviti alla newsletter per essere avvisato.</p>
     {%- endif %}
   </div>
 </section>

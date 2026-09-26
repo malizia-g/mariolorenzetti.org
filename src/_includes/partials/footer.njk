@@ -1,26 +1,26 @@
 {%- set t = i18n[lang] -%}
-<footer class="relative overflow-hidden bg-ink text-gold">
+<footer class="relative overflow-hidden bg-clay text-cream">
   {# L'albero, grande e sfumato, "sorge" dal fondo della pagina. #}
   <img src="/assets/albero.jpg" eleventy:widths="512" sizes="512px" alt="" loading="lazy" class="pointer-events-none absolute -right-24 -bottom-40 size-[34rem] rounded-full opacity-15 mix-blend-luminosity">
   <div class="relative mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
     <div>
       {% set ornamentClass = "h-7 w-24 text-saffron" %}{% include "partials/ornament.njk" %}
       <h2 class="mt-4 text-3xl text-cream">{{ t.newsletterTitle }}</h2>
-      <p class="mt-2 max-w-md text-gold/80 italic">{{ t.newsletterText }}</p>
+      <p class="mt-2 max-w-md text-cream/85 italic">{{ t.newsletterText }}</p>
       <div class="mt-6 flex flex-wrap gap-4">
         <a href="{{ site.newsletter.it }}" class="btn border-saffron bg-saffron text-ink [box-shadow:4px_4px_0_var(--color-cream)] hover:[box-shadow:6px_6px_0_var(--color-cream)]" rel="noopener" target="_blank">{{ t.newsletterIt }}</a>
         <a href="{{ site.newsletter.fr }}" class="btn border-cream bg-transparent text-cream [box-shadow:4px_4px_0_var(--color-saffron)] hover:[box-shadow:6px_6px_0_var(--color-saffron)]" rel="noopener" target="_blank">{{ t.newsletterFr }}</a>
       </div>
     </div>
     <div>
-      <h2 class="smallcaps text-saffron">{{ t.booksTitle }}</h2>
+      <h2 class="smallcaps text-saffron-soft">{{ t.booksTitle }}</h2>
       <ul class="mt-4 space-y-3 text-lg">
-        <li><a class="text-cream decoration-saffron/50 underline-offset-4 hover:underline" href="/wp-content/uploads/2022/09/L_esperienza-della-kundalini.pdf">L'esperienza della kundalini</a> <span class="text-gold/60 italic">pdf</span></li>
-        <li><a class="text-cream decoration-saffron/50 underline-offset-4 hover:underline" href="/wp-content/uploads/2022/07/Tempestosa-ricerca-di-se.pdf">Tempestosa ricerca di sé</a> <span class="text-gold/60 italic">pdf</span></li>
+        <li><a class="text-cream decoration-saffron/50 underline-offset-4 hover:underline" href="/wp-content/uploads/2022/09/L_esperienza-della-kundalini.pdf">L'esperienza della kundalini</a> <span class="text-saffron-soft/80 italic">pdf</span></li>
+        <li><a class="text-cream decoration-saffron/50 underline-offset-4 hover:underline" href="/wp-content/uploads/2022/07/Tempestosa-ricerca-di-se.pdf">Tempestosa ricerca di sé</a> <span class="text-saffron-soft/80 italic">pdf</span></li>
       </ul>
     </div>
     <div>
-      <h2 class="smallcaps text-saffron">{{ t.contact }}</h2>
+      <h2 class="smallcaps text-saffron-soft">{{ t.contact }}</h2>
       <ul class="mt-4 space-y-3 text-lg text-cream">
         <li><a class="hover:text-saffron" href="{{ site.phoneHref }}">{{ site.phone }}</a></li>
         <li><a class="hover:text-saffron" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
@@ -28,8 +28,8 @@
       </ul>
     </div>
   </div>
-  <div class="relative border-t border-gold/20">
-    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-5 text-sm text-gold/70 sm:px-6">
+  <div class="relative bg-clay-deep">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-5 text-sm text-cream/75 sm:px-6">
       <p>© {{ build.year }} Mario Lorenzetti</p>
       <p class="flex gap-5">
         <a class="hover:text-saffron" href="{{ site.privacyUrl }}" rel="noopener">{{ t.privacy }}</a>

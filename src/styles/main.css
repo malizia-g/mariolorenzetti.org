@@ -24,14 +24,16 @@
   font-display: swap;
 }
 
-/* Palette presa dal dipinto dell'albero (logo): zafferano, ocra, oro, terra di Siena, seppia, nero dei rami. */
+/* Palette presa dal dipinto dell'albero (logo): ocra dorato, oro, argilla rossa, terra di Siena, seppia, nero dei rami. */
 @theme {
   --font-display: "Young Serif", "Georgia", serif;
   --font-serif: "Newsreader", "Georgia", serif;
   --font-sans: "Newsreader", "Georgia", serif;
 
-  --color-saffron: #fabc33;
-  --color-saffron-soft: #fde2a0;
+  --color-saffron: #eec36b;
+  --color-saffron-soft: #f8e3b5;
+  --color-clay: #9c4a2f;
+  --color-clay-deep: #86402a;
   --color-gold: #e3c585;
   --color-ochre: #c9a35f;
   --color-sienna: #a24f28;
