@@ -12,8 +12,18 @@
 
 const SHEET_NAME = 'Eventi';
 
+function getEventsSheet() {
+  const sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+  const wanted = SHEET_NAME.toLowerCase();
+  const match = sheets.filter(function (s) { return s.getName().trim().toLowerCase() === wanted; })[0];
+  if (match) return match;
+  if (sheets.length === 1) return sheets[0];
+  throw new Error('Foglio "' + SHEET_NAME + '" non trovato. Fogli presenti: ' +
+    sheets.map(function (s) { return s.getName(); }).join(', '));
+}
+
 function doGet() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const sheet = getEventsSheet();
   const values = sheet.getDataRange().getValues();
   const headers = values.shift().map(function (h) { return String(h).trim().toLowerCase(); });
   const tz = Session.getScriptTimeZone();

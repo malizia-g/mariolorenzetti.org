@@ -2,7 +2,12 @@ import { HtmlBasePlugin } from "@11ty/eleventy";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import markdownIt from "markdown-it";
+import fs from "node:fs";
 import site from "./src/_data/site.js";
+
+// In locale le variabili (es. EVENTS_URL) stanno in .dev.vars, come per le Functions.
+// Non sovrascrive quelle già impostate (Cloudflare Pages, riga di comando).
+if (fs.existsSync(".dev.vars")) process.loadEnvFile(".dev.vars");
 
 const MONTHS = {
   it: ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
