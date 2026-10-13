@@ -1,0 +1,60 @@
+# Redirect dai vecchi indirizzi WordPress (Cloudflare Pages).
+# I link con parametri (?p=, ?page_id=, ?s=) sono gestiti da functions/index.js.
+
+# Vecchio archivio del calendario (ora sul Google Sheet)
+/seminari-di-respirazione-olotropica-intensivi /calendario/ 301
+/seminari-di-respirazione-olotropica-intensivi/ /calendario/ 301
+
+# Categorie, autore, tag, paginazione
+/category/pubblicazioni-di-mario-lorenzetti/* /scritti/ 301
+/category/calendario-dei-seminari/* /calendario/ 301
+/category/* / 301
+/author/* / 301
+/fr/author/* /fr/ 301
+/tag/* / 301
+/fr/tag/* /fr/ 301
+/page/* / 301
+/fr/page/* /fr/ 301
+
+# Feed e sitemap
+/feed/ /feed/index.xml 200
+/feed /feed/index.xml 200
+/fr/feed/* /feed/ 301
+/comments/feed/* /feed/ 301
+/wp-sitemap.xml /sitemap.xml 301
+/sitemap_index.xml /sitemap.xml 301
+/sitemap-home.xml /sitemap.xml 301
+/sitemap-posts.xml /sitemap.xml 301
+/sitemap-pages.xml /sitemap.xml 301
+/fr/sitemap.xml /sitemap.xml 301
+/fr/sitemap-home.xml /sitemap.xml 301
+/fr/sitemap-posts.xml /sitemap.xml 301
+/fr/sitemap-pages.xml /sitemap.xml 301
+
+# Archivi per data
+/2014/* / 301
+/fr/2014/* /fr/ 301
+/2015/* / 301
+/fr/2015/* /fr/ 301
+/2016/* / 301
+/fr/2016/* /fr/ 301
+/2017/* / 301
+/fr/2017/* /fr/ 301
+/2018/* / 301
+/fr/2018/* /fr/ 301
+/2019/* / 301
+/fr/2019/* /fr/ 301
+/2020/* / 301
+/fr/2020/* /fr/ 301
+/2021/* / 301
+/fr/2021/* /fr/ 301
+/2022/* / 301
+/fr/2022/* /fr/ 301
+/2023/* / 301
+/fr/2023/* /fr/ 301
+/2024/* / 301
+/fr/2024/* /fr/ 301
+/2025/* / 301
+/fr/2025/* /fr/ 301
+/2026/* / 301
+/fr/2026/* /fr/ 301

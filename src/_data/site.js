@@ -11,8 +11,9 @@ export default {
   defaultImage: "/assets/og-default.jpg",
   // Staging (GitHub Pages) non deve essere indicizzato.
   noindex: process.env.NOINDEX === "1",
-  // Selettore dei temi di colore, solo nella demo.
-  themePicker: process.env.THEME_PICKER === "1",
+  // Selettore dei temi di colore: attivo finché Mario non sceglie il tema
+  // (poi impostare themes.default in themes.js e mettere false qui).
+  themePicker: process.env.THEME_PICKER !== "0",
   newsletter: {
     it: "https://stats.sender.net/forms/axk7jz/view",
     fr: "https://stats.sender.net/forms/elYMkV/view",

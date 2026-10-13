@@ -12,7 +12,7 @@ layout: layouts/base.njk
     <div class="prose-site mt-8">{{ content | safe }}</div>
   </div>
 
-  <form id="contatto" action="/api/contatto.php" method="post" class="relative space-y-5 border-[1.5px] border-ink bg-cream p-6 shadow-[8px_8px_0_var(--color-saffron)] md:p-8">
+  <form id="contatto" action="/api/contatto" method="post" class="relative space-y-5 border-[1.5px] border-ink bg-cream p-6 shadow-[8px_8px_0_var(--color-saffron)] md:p-8">
     <p id="esito" role="status" class="hidden p-4"></p>
     <input type="hidden" name="lang" value="{{ lang }}">
     <input type="hidden" name="t" value="">

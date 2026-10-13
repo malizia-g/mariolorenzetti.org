@@ -3,11 +3,11 @@
  *
  * 1. doGet: pubblica il foglio "Eventi" come JSON (letto da src/_data/events.js al build).
  *    Distribuisci > Nuova distribuzione > App web — Esegui come: Me — Accesso: Chiunque.
- *    L'URL /exec va nel secret GitHub EVENTS_URL.
- * 2. Menu "Sito web > Pubblica le date sul sito": avvia il workflow GitHub di build e deploy.
+ *    L'URL /exec va nella variabile EVENTS_URL del progetto Cloudflare Pages (Settings > Variables).
+ * 2. Menu "Sito web > Pubblica le date sul sito": rigenera il sito su Cloudflare Pages.
  *    In Impostazioni progetto > Proprietà script aggiungi:
- *      GITHUB_TOKEN = token fine-grained con permesso "Actions: read and write" solo su questo repo
- *      GITHUB_REPO  = malizia-g/mariolorenzetti.org
+ *      DEPLOY_HOOK_URL = deploy hook del progetto Cloudflare Pages
+ *      (Cloudflare > Workers & Pages > progetto > Settings > Builds > Deploy hooks)
  */
 
 const SHEET_NAME = 'Eventi';
@@ -42,22 +42,14 @@ function onOpen() {
 }
 
 function publishSite() {
-  const props = PropertiesService.getScriptProperties();
-  const token = props.getProperty('GITHUB_TOKEN');
-  const repo = props.getProperty('GITHUB_REPO');
+  const hook = PropertiesService.getScriptProperties().getProperty('DEPLOY_HOOK_URL');
   const ui = SpreadsheetApp.getUi();
-  if (!token || !repo) {
-    ui.alert('Configurazione mancante: GITHUB_TOKEN e GITHUB_REPO nelle proprietà dello script.');
+  if (!hook) {
+    ui.alert('Configurazione mancante: DEPLOY_HOOK_URL nelle proprietà dello script.');
     return;
   }
-  const res = UrlFetchApp.fetch('https://api.github.com/repos/' + repo + '/actions/workflows/deploy.yml/dispatches', {
-    method: 'post',
-    contentType: 'application/json',
-    headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' },
-    payload: JSON.stringify({ ref: 'main' }),
-    muteHttpExceptions: true,
-  });
-  if (res.getResponseCode() === 204) {
+  const res = UrlFetchApp.fetch(hook, { method: 'post', muteHttpExceptions: true });
+  if (res.getResponseCode() < 300) {
     ui.alert('Aggiornamento avviato. Le date saranno online tra circa 2-3 minuti.');
   } else {
     ui.alert('Errore ' + res.getResponseCode() + ': ' + res.getContentText());

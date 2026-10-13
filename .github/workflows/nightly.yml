@@ -1,0 +1,19 @@
+name: Ricostruzione notturna
+
+# Ogni notte rigenera il sito su Cloudflare Pages: gli eventi conclusi passano
+# in "Iniziative passate" e le date del Google Sheet vengono rilette.
+on:
+  schedule:
+    - cron: "15 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Avvia la build su Cloudflare
+        env:
+          HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "Secret CF_DEPLOY_HOOK non configurato: salto."; exit 0; fi
+          curl -fsS -X POST "$HOOK"

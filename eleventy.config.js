@@ -18,9 +18,9 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({
     "src/wp-content": "wp-content",
     "src/assets": "assets",
-    "src/.htaccess": ".htaccess",
-    "src/api": "api",
     "src/admin": "admin",
+    // Configurazione di Cloudflare Pages (redirect, header, rotte delle Functions).
+    "src/cloudflare": "/",
   });
   // L'editor è un'app PHP/JS a sé: copiata così com'è, non elaborata da 11ty.
   eleventyConfig.ignores.add("src/admin/**");

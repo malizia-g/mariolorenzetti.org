@@ -1,5 +1,5 @@
 // Editor dei contenuti Markdown di mariolorenzetti.org.
-// Tutte le chiamate passano da api.php, che parla con GitHub.
+// Tutte le chiamate passano da /admin/api (Cloudflare Function), che parla con GitHub.
 (() => {
   const $ = (id) => document.getElementById(id);
   let SITE = "https://mariolorenzetti.org";
@@ -14,7 +14,7 @@
 
   async function api(action, { method = "GET", body, query = "" } = {}) {
     if (demo) return demoApi(action, body, query);
-    const res = await fetch(`api.php?action=${action}${query}`, {
+    const res = await fetch(`api?action=${action}${query}`, {
       method,
       headers: { "Content-Type": "application/json", "X-CSRF": csrf },
       body: body ? JSON.stringify(body) : undefined,
@@ -149,7 +149,12 @@
     $("app").hidden = false;
     $("sheetLink").href = me.sheetUrl || "#";
     $("viewSite").href = me.siteUrl || "/";
-    await loadList();
+    // Già autenticati: un errore qui (es. GitHub non raggiungibile) va mostrato, non deve riportare al login.
+    try {
+      await loadList();
+    } catch (e) {
+      toast("Impossibile caricare l'elenco delle pagine: " + e.message, true);
+    }
     pollStatus();
   }
 
