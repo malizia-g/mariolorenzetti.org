@@ -44,8 +44,9 @@ L'editor `/admin/` con login Google è facoltativo e si aggiunge dopo (passo 7):
 
 ### 1. Progetto Cloudflare Pages
 
-1. Cloudflare → Workers & Pages → Create → Pages → **Connect to Git** → repo `malizia-g/mariolorenzetti.org`.
-2. Build command `npm run build`, output directory `_site`, branch di produzione `main` (la versione di Node viene letta da `.node-version`).
+1. Cloudflare → Workers & Pages → Create application → in fondo **"Looking to deploy Pages? Get started"** → **Import an existing Git repository** → repo `malizia-g/mariolorenzetti.org`.
+   Deve essere un progetto **Pages**, non un Worker: se nelle impostazioni compare "Deploy command `npx wrangler deploy`" è un Worker (le `functions/` e i `_redirects` non funzionerebbero) → eliminalo e ricrealo da qui.
+2. Framework preset *None*, build command `npm run build`, build output directory `_site`, root directory **vuota**, branch di produzione `main` (la versione di Node viene letta da `.node-version`). Puoi già aggiungere qui `EVENTS_URL` (passo 3).
 3. Settings → Builds → **Deploy hooks** → crea un hook (branch `main`) e copia l'URL: serve ai passi 3 e 5.
 
 ### 2. Google Sheet delle date
