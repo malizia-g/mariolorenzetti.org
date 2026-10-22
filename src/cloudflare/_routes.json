@@ -1,5 +1,5 @@
 {
   "version": 1,
-  "include": ["/", "/api/*", "/admin/api"],
+  "include": ["/", "/api/*", "/admin/api", "/wp-content/uploads/*"],
   "exclude": []
 }

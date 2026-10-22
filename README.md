@@ -31,7 +31,7 @@ Anche la build di Eleventy legge `.dev.vars`: con `EVENTS_URL` le date arrivano 
 - `src/calendario/evento.njk` – una pagina per evento (`/calendario/AAAA/citta-mese/`) con JSON-LD `Event`
 - `src/_data/themes.js` + `src/css/themes.njk` – temi di colore; `src/_includes/partials/theme-picker.njk` – selettore
 - `src/cloudflare/` – `_redirects` (vecchi URL WordPress), `_headers`, `_routes.json`; copiati nella radice del sito
-- `functions/` – `admin/api.js` (editor), `api/contatto.js` (modulo), `api/newsletter.js` (conferma iscrizione), `index.js` (vecchi link `?p=` / `?page_id=`)
+- `functions/` – `admin/api.js` (editor), `api/contatto.js` (modulo), `api/newsletter.js` (conferma iscrizione), `index.js` (vecchi link `?p=` / `?page_id=`), `wp-content/uploads/[[path]].js` (copie ridimensionate di WordPress → immagine originale)
 - `lib/cf.js` – sessione firmata, verifica Google, client GitHub
 - `src/admin/` – interfaccia dell'editor (non elaborata da 11ty)
 - `src/wp-content/uploads/` – PDF e immagini del vecchio sito, stessi URL
