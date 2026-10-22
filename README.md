@@ -9,7 +9,7 @@ Sito di Mario Lorenzetti (Respirazione Olotropica), generato con [Eleventy](http
 | Pagine e scritti (Markdown) | Editor `/admin/` (login Google) oppure `src/pagine`, `src/articoli`, `src/fr` | Ogni salvataggio è un commit su `main` → Cloudflare rigenera il sito (2-3 min) |
 | Date dei seminari | Google Sheet "Eventi" | Menu del foglio **Sito web → Pubblica le date sul sito**, pulsante "Aggiorna il sito" nell'editor, o ricostruzione notturna |
 | Immagini | Editor (ridimensionate a max 2000 px) → `src/assets/uploads/` | Ottimizzate al build in AVIF/WebP (`/img/`) |
-| Modulo contatti | `functions/api/contatto.js` | Email a info@mariolorenzetti.org via Resend |
+| Modulo contatti | `functions/api/contatto.js` → `doPost` dell'Apps Script | Email a info@mariolorenzetti.org (inviata dall'account Google dello Sheet) e copia nel foglio "Contatti" |
 | Colori | `src/_data/themes.js` (10 temi) | Il selettore resta visibile finché `themePicker` in `src/_data/site.js` è attivo |
 
 ## Sviluppo
@@ -39,7 +39,7 @@ Anche la build di Eleventy legge `.dev.vars`: con `EVENTS_URL` le date arrivano 
 
 ## Messa online (una volta sola)
 
-Il setup minimo (passi 1–5) mette online il sito con le date dal Google Sheet e il modulo contatti.
+Il setup minimo (passi 1–5) mette online il sito con le date dal Google Sheet e il modulo contatti (entrambi passano dall'Apps Script dello Sheet).
 L'editor `/admin/` con login Google è facoltativo e si aggiunge dopo (passo 7): finché non è configurato, il sito funziona normalmente e l'editor semplicemente non permette l'accesso.
 
 ### 1. Progetto Cloudflare Pages
@@ -62,20 +62,26 @@ L'editor `/admin/` con login Google è facoltativo e si aggiunge dopo (passo 7):
 
 | Nome | Valore |
 |---|---|
-| `EVENTS_URL` | URL `/exec` del passo 2 (usato dalla build per leggere le date) |
-| `RESEND_API_KEY` | chiave API di [Resend](https://resend.com) per il modulo contatti (dominio `mariolorenzetti.org` verificato, vedi passo 4); senza, il modulo mostra un errore con l'indirizzo email da usare |
+| `EVENTS_URL` | URL `/exec` del passo 2 (la build ci legge le date, il modulo contatti ci invia i messaggi) |
+| `CONTACT_TOKEN` | stringa casuale (`openssl rand -hex 32`), uguale alla proprietà `CONTACT_TOKEN` dell'Apps Script; senza, il modulo mostra un errore con l'indirizzo email da usare |
 
-Facoltative: `CONTACT_TO` (default `info@mariolorenzetti.org`), `CONTACT_FROM` (default `noreply@mariolorenzetti.org`).
+Facoltativa: `CONTACT_TO`, l'indirizzo mostrato nei messaggi di errore del modulo (default `info@mariolorenzetti.org`).
 
 Dopo aver salvato le variabili: Deployments → **Retry deployment** (o un nuovo commit) perché la build le usi.
 
-Infine, nell'Apps Script: Impostazioni progetto → Proprietà script → `DEPLOY_HOOK_URL` = deploy hook del passo 1.
-Ricarica il foglio: compare il menu **Sito web → Pubblica le date sul sito**.
+Infine, nell'Apps Script: Impostazioni progetto → Proprietà script:
+
+- `DEPLOY_HOOK_URL` = deploy hook del passo 1 → ricaricando il foglio compare il menu **Sito web → Pubblica le date sul sito**
+- `CONTACT_TOKEN` = lo stesso valore della variabile Cloudflare
+- `CONTACT_TO` (facoltativa) = dove arrivano i messaggi del modulo (default `info@mariolorenzetti.org`)
+
+Le email del modulo partono dall'account Google proprietario dello Sheet (limite 100 al giorno con Gmail): conviene che sia un account di Mario o dedicato al sito.
+La prima volta, dopo aver incollato la versione dello script con `doPost`, crea una **Nuova versione** della distribuzione e autorizza l'invio di email.
 
 ### 4. Dominio e posta
 
 1. Cloudflare → Add a domain → `mariolorenzetti.org`; controlla i record DNS importati.
-2. Email Routing: `info@mariolorenzetti.org` → casella di Mario. Aggiungi i record DNS di Resend (SPF/DKIM) e un record DMARC.
+2. Email Routing: `info@mariolorenzetti.org` → casella di Mario. Aggiungi un record DMARC.
 3. Cambia i nameserver presso il registrar con quelli indicati da Cloudflare.
 4. Pages → Custom domains: aggiungi `mariolorenzetti.org` e `www.mariolorenzetti.org`; regola di redirect `www` → dominio principale. SSL/TLS → Always Use HTTPS.
 

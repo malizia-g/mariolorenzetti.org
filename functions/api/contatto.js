@@ -1,7 +1,9 @@
-// Modulo contatti (/api/contatto): invia l'email a Mario tramite Resend. Nessun database.
+// Modulo contatti (/api/contatto): controlla i dati e li passa all'Apps Script del Google Sheet
+// (doPost in docs/apps-script/eventi.gs), che invia l'email a Mario e salva il messaggio nel foglio "Contatti".
 //
-// Variabili: RESEND_API_KEY, CONTACT_TO (default info@mariolorenzetti.org),
-//            CONTACT_FROM (default noreply@mariolorenzetti.org, dominio verificato su Resend).
+// Variabili: EVENTS_URL (URL /exec dell'Apps Script, lo stesso delle date),
+//            CONTACT_TOKEN (uguale alla proprietà CONTACT_TOKEN dello script),
+//            CONTACT_TO (facoltativa, indirizzo mostrato nei messaggi di errore; default info@mariolorenzetti.org).
 import { json } from "../../lib/cf.js";
 
 const MESSAGES = {
@@ -21,7 +23,6 @@ const clean = (v, max) => String(v ?? "").replace(/[\r\0]/g, "").slice(0, max).t
 
 export async function onRequestPost({ request, env }) {
   const to = env.CONTACT_TO || "info@mariolorenzetti.org";
-  const from = env.CONTACT_FROM || "noreply@mariolorenzetti.org";
   const form = await request.formData().catch(() => null);
   if (!form) return json({ ok: false, message: "Richiesta non valida" }, 400);
 
@@ -38,20 +39,21 @@ export async function onRequestPost({ request, env }) {
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   if (!nome || !messaggio || !form.get("privacy") || !validEmail) return json({ ok: false, message: t.invalid }, 422);
 
-  if (!env.RESEND_API_KEY) return json({ ok: false, message: t.error + to }, 500);
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: `Sito mariolorenzetti.org <${from}>`,
-      to: [to],
-      reply_to: email,
-      subject: "[Sito] " + (oggetto || `Messaggio da ${nome}`),
-      text: `Nome: ${nome}\nEmail: ${email}\nOggetto: ${oggetto}\nLingua: ${form.get("lang") === "fr" ? "FR" : "IT"}\n\n${messaggio}\n`,
-    }),
-  });
-  if (!res.ok) {
-    console.error("[contatto] Resend", res.status, await res.text());
+  if (!env.EVENTS_URL || !env.CONTACT_TOKEN) return json({ ok: false, message: t.error + to }, 500);
+  const lingua = form.get("lang") === "fr" ? "FR" : "IT";
+  let result;
+  try {
+    const res = await fetch(env.EVENTS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: env.CONTACT_TOKEN, nome, email, oggetto, messaggio, lingua }),
+    });
+    result = await res.json();
+  } catch (err) {
+    result = { ok: false, error: err.message };
+  }
+  if (!result?.ok) {
+    console.error("[contatto] Apps Script", result?.error);
     return json({ ok: false, message: t.error + to }, 502);
   }
   return json({ ok: true, message: t.ok });
