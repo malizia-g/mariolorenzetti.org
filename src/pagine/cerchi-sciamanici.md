@@ -15,4 +15,4 @@ lang: it
 - Viaggi sciamanici nel mondo di sotto e nel mondo di sopra
 - I 4 atti di potere di Mikkal Smith
 - Cerchi e cerimonie sciamaniche
-- Lo spazio sacro e gli archetipi delle direzioni
+- Lo spazio sacro e gli archetipi delle direzioni.
