@@ -1,10 +1,12 @@
-name: Demo su GitHub Pages
+name: Staging su GitHub Pages
 
 # Anteprima del sito (noindex) su https://malizia-g.github.io/mariolorenzetti.org/
-# Editor e modulo contatti richiedono PHP: qui non funzionano.
+# costruita dal branch "staging": le modifiche si provano qui e passano su main
+# (sito di produzione su Cloudflare) solo quando sono definitive.
+# Qui non ci sono le Functions: editor in modalità dimostrativa, modulo contatti non attivo.
 on:
   push:
-    branches: [main]
+    branches: [staging]
   workflow_dispatch:
 
 permissions:

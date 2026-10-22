@@ -15,6 +15,12 @@ Sito di Mario Lorenzetti (Respirazione Olotropica), generato con [Eleventy](http
 
 ## Sviluppo
 
+Branch:
+- `staging` – qui si lavora: ogni push aggiorna l'anteprima su https://malizia-g.github.io/mariolorenzetti.org/ (noindex).
+- `main` – solo modifiche definitive: ogni push pubblica il sito su Cloudflare Pages. Anche l'editor `/admin/` salva su `main`, quindi prima di lavorare su `staging` conviene riallinearlo: `git checkout staging && git merge main`.
+
+Per pubblicare: `git checkout main && git merge staging && git push`.
+
 ```bash
 npm install
 npm run dev                          # sito su http://localhost:8080 (senza Functions)
@@ -35,7 +41,7 @@ Anche la build di Eleventy legge `.dev.vars`: con `EVENTS_URL` le date arrivano 
 - `lib/cf.js` – sessione firmata, verifica Google, client GitHub
 - `src/admin/` – interfaccia dell'editor (non elaborata da 11ty)
 - `src/wp-content/uploads/` – PDF e immagini del vecchio sito, stessi URL
-- `.github/workflows/pages.yml` – demo su GitHub Pages (noindex, editor in modalità dimostrativa)
+- `.github/workflows/pages.yml` – staging su GitHub Pages dal branch `staging` (noindex, editor in modalità dimostrativa)
 - `.github/workflows/nightly.yml` – ricostruzione notturna tramite deploy hook
 
 ## Messa online (una volta sola)
