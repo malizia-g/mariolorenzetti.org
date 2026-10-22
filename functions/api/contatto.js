@@ -40,21 +40,24 @@ export async function onRequestPost({ request, env }) {
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   if (!nome || !messaggio || !form.get("privacy") || !validEmail) return json({ ok: false, message: t.invalid }, 422);
 
-  if (!env.EVENTS_URL || !env.CONTACT_TOKEN) return json({ ok: false, message: t.error + to }, 500);
+  // trim(): uno spazio o un a capo incollato per sbaglio nelle variabili di Cloudflare non deve bloccare l'invio.
+  const scriptUrl = (env.EVENTS_URL || "").trim();
+  const token = (env.CONTACT_TOKEN || "").trim();
+  if (!scriptUrl || !token) return json({ ok: false, message: t.error + to }, 500);
   const lang = form.get("lang") === "fr" ? "fr" : "it";
   const newsletter = Boolean(form.get("newsletter"));
   let confirmUrl;
   if (newsletter) {
     const url = new URL(lang === "fr" ? "/fr/contacts/" : "/contatti/", request.url);
-    url.search = new URLSearchParams({ e: email, n: nome, s: await signNewsletter({ email, nome, lang }, env.CONTACT_TOKEN) });
+    url.search = new URLSearchParams({ e: email, n: nome, s: await signNewsletter({ email, nome, lang }, token) });
     confirmUrl = url.href;
   }
   let result;
   try {
-    const res = await fetch(env.EVENTS_URL, {
+    const res = await fetch(scriptUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: env.CONTACT_TOKEN, nome, email, oggetto, messaggio, lingua: lang.toUpperCase(), newsletter, confirmUrl }),
+      body: JSON.stringify({ token, nome, email, oggetto, messaggio, lingua: lang.toUpperCase(), newsletter, confirmUrl }),
     });
     result = await res.json();
   } catch (err) {

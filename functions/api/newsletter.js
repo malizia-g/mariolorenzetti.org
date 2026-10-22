@@ -25,17 +25,20 @@ export async function onRequestPost({ request, env }) {
   const t = MESSAGES[lang];
   const email = String(form.get("e") || "");
   const nome = String(form.get("n") || "");
-  if (!env.EVENTS_URL || !env.CONTACT_TOKEN) return json({ ok: false, message: t.error }, 500);
-  if (!(await verifyNewsletter({ email, nome, lang }, String(form.get("s") || ""), env.CONTACT_TOKEN))) {
+  // trim(): uno spazio o un a capo incollato per sbaglio nelle variabili di Cloudflare non deve bloccare l'invio.
+  const scriptUrl = (env.EVENTS_URL || "").trim();
+  const token = (env.CONTACT_TOKEN || "").trim();
+  if (!scriptUrl || !token) return json({ ok: false, message: t.error }, 500);
+  if (!(await verifyNewsletter({ email, nome, lang }, String(form.get("s") || ""), token))) {
     return json({ ok: false, message: t.invalid }, 422);
   }
 
   let result;
   try {
-    const res = await fetch(env.EVENTS_URL, {
+    const res = await fetch(scriptUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: env.CONTACT_TOKEN, action: "subscribe", email, nome, lingua: lang.toUpperCase() }),
+      body: JSON.stringify({ token, action: "subscribe", email, nome, lingua: lang.toUpperCase() }),
     });
     result = await res.json();
   } catch (err) {
