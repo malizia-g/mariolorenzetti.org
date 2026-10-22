@@ -19,9 +19,9 @@ layout: layouts/base.njk
       </div>
     </div>
 
-    {# L'albero nel cerchio: "respira" lentamente, con una scritta che ruota intorno. #}
+    {# L'albero nel cerchio: "respira" lentamente, con una scritta intorno. #}
     <div class="relative order-first mx-auto aspect-square w-full max-w-[16rem] sm:max-w-[24rem] md:order-none md:max-w-[32rem]">
-      <svg viewBox="0 0 500 500" class="absolute inset-0 size-full animate-spin-slow text-ink" aria-hidden="true">
+      <svg viewBox="0 0 500 500" class="absolute inset-0 size-full text-ink" aria-hidden="true">
         <defs><path id="anello" d="M250,250 m-232,0 a232,232 0 1,1 464,0 a232,232 0 1,1 -464,0"/></defs>
         <text class="font-display" font-size="19" fill="currentColor"><textPath href="#anello" textLength="1455" lengthAdjust="spacing">{{ heroRing }}</textPath></text>
       </svg>

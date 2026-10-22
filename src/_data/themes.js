@@ -9,7 +9,7 @@
 //   parchment    sfondo pagina             cream   schede e riquadri
 //   ink          testo                     inkSoft testo secondario
 export default {
-  default: "terra-accesa",
+  default: "aria",
   list: [
     {
       id: "terra-accesa",
@@ -45,7 +45,7 @@ export default {
       id: "aria",
       name: "Aria",
       note: "Elemento aria: cielo chiaro e azzurro",
-      colors: { saffron: "#c9def0", saffronSoft: "#e3eef8", gold: "#b8cfe6", ochre: "#7e9fc4", sienna: "#2f5f93", umber: "#3f5877", ink: "#17243a", inkSoft: "#4a5a70", parchment: "#f4f7fb", cream: "#fbfcfe", clay: "#3c5a82", clayDeep: "#2f4869" },
+      colors: { saffron: "#c9def0", saffronSoft: "#e3eef8", gold: "#b8cfe6", ochre: "#7e9fc4", sienna: "#2f5f93", umber: "#324a69", ink: "#0f1a2b", inkSoft: "#34435a", parchment: "#f4f7fb", cream: "#fbfcfe", clay: "#3c5a82", clayDeep: "#2f4869" },
     },
     {
       id: "bosco",
@@ -57,7 +57,7 @@ export default {
       id: "ametista",
       name: "Ametista",
       note: "Spirituale: lavanda, viola e oro",
-      colors: { saffron: "#d6c5ec", saffronSoft: "#ebe1f6", gold: "#e3c585", ochre: "#b08fd1", sienna: "#6b3f9c", umber: "#5a4776", ink: "#1f1830", inkSoft: "#554a68", parchment: "#f6f2fa", cream: "#fcfaff", clay: "#46336b", clayDeep: "#372853" },
+      colors: { saffron: "#d6c5ec", saffronSoft: "#ebe1f6", gold: "#e3c585", ochre: "#b08fd1", sienna: "#6b3f9c", umber: "#5a4776", ink: "#171126", inkSoft: "#433955", parchment: "#f6f2fa", cream: "#fcfaff", clay: "#46336b", clayDeep: "#372853" },
     },
     {
       id: "alba",
@@ -69,7 +69,7 @@ export default {
       id: "professionale",
       name: "Professionale",
       note: "Sobrio: pietra, blu notte e un tocco d'oro",
-      colors: { saffron: "#e4ddcf", saffronSoft: "#f0ebe1", gold: "#d8c7a0", ochre: "#b39a63", sienna: "#2d5a87", umber: "#4a5563", ink: "#1b2129", inkSoft: "#4d5561", parchment: "#f7f6f2", cream: "#ffffff", clay: "#263545", clayDeep: "#1c2734" },
+      colors: { saffron: "#e4ddcf", saffronSoft: "#f0ebe1", gold: "#d8c7a0", ochre: "#b39a63", sienna: "#2d5a87", umber: "#4a5563", ink: "#13181f", inkSoft: "#3a424d", parchment: "#f7f6f2", cream: "#ffffff", clay: "#263545", clayDeep: "#1c2734" },
     },
   ],
 };
