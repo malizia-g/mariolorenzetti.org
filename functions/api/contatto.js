@@ -1,10 +1,11 @@
 // Modulo contatti (/api/contatto): controlla i dati e li passa all'Apps Script del Google Sheet
 // (doPost in docs/apps-script/eventi.gs), che invia l'email a Mario e salva il messaggio nel foglio "Contatti".
+// Se il visitatore chiede la newsletter, lo script gli invia anche il link di conferma (vedi newsletter.js).
 //
 // Variabili: EVENTS_URL (URL /exec dell'Apps Script, lo stesso delle date),
 //            CONTACT_TOKEN (uguale alla proprietà CONTACT_TOKEN dello script),
 //            CONTACT_TO (facoltativa, indirizzo mostrato nei messaggi di errore; default info@mariolorenzetti.org).
-import { json } from "../../lib/cf.js";
+import { json, signNewsletter } from "../../lib/cf.js";
 
 const MESSAGES = {
   it: {
@@ -40,13 +41,20 @@ export async function onRequestPost({ request, env }) {
   if (!nome || !messaggio || !form.get("privacy") || !validEmail) return json({ ok: false, message: t.invalid }, 422);
 
   if (!env.EVENTS_URL || !env.CONTACT_TOKEN) return json({ ok: false, message: t.error + to }, 500);
-  const lingua = form.get("lang") === "fr" ? "FR" : "IT";
+  const lang = form.get("lang") === "fr" ? "fr" : "it";
+  const newsletter = Boolean(form.get("newsletter"));
+  let confirmUrl;
+  if (newsletter) {
+    const url = new URL(lang === "fr" ? "/fr/contacts/" : "/contatti/", request.url);
+    url.search = new URLSearchParams({ e: email, n: nome, s: await signNewsletter({ email, nome, lang }, env.CONTACT_TOKEN) });
+    confirmUrl = url.href;
+  }
   let result;
   try {
     const res = await fetch(env.EVENTS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: env.CONTACT_TOKEN, nome, email, oggetto, messaggio, lingua }),
+      body: JSON.stringify({ token: env.CONTACT_TOKEN, nome, email, oggetto, messaggio, lingua: lang.toUpperCase(), newsletter, confirmUrl }),
     });
     result = await res.json();
   } catch (err) {

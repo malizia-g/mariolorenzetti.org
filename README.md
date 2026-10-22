@@ -10,6 +10,7 @@ Sito di Mario Lorenzetti (Respirazione Olotropica), generato con [Eleventy](http
 | Date dei seminari | Google Sheet "Eventi" | Menu del foglio **Sito web → Pubblica le date sul sito**, pulsante "Aggiorna il sito" nell'editor, o ricostruzione notturna |
 | Immagini | Editor (ridimensionate a max 2000 px) → `src/assets/uploads/` | Ottimizzate al build in AVIF/WebP (`/img/`) |
 | Modulo contatti | `functions/api/contatto.js` → `doPost` dell'Apps Script | Email a info@mariolorenzetti.org (inviata dall'account Google dello Sheet) e copia nel foglio "Contatti" |
+| Newsletter | [Sender.net](https://app.sender.net) (gruppi "Italia" e "France et Suisse") | Pulsanti nel footer verso i moduli di Sender; casella nel modulo contatti con email di conferma → `functions/api/newsletter.js` → iscrizione via Apps Script |
 | Colori | `src/_data/themes.js` (10 temi) | Il selettore resta visibile finché `themePicker` in `src/_data/site.js` è attivo |
 
 ## Sviluppo
@@ -30,7 +31,7 @@ Anche la build di Eleventy legge `.dev.vars`: con `EVENTS_URL` le date arrivano 
 - `src/calendario/evento.njk` – una pagina per evento (`/calendario/AAAA/citta-mese/`) con JSON-LD `Event`
 - `src/_data/themes.js` + `src/css/themes.njk` – temi di colore; `src/_includes/partials/theme-picker.njk` – selettore
 - `src/cloudflare/` – `_redirects` (vecchi URL WordPress), `_headers`, `_routes.json`; copiati nella radice del sito
-- `functions/` – `admin/api.js` (editor), `api/contatto.js` (modulo), `index.js` (vecchi link `?p=` / `?page_id=`)
+- `functions/` – `admin/api.js` (editor), `api/contatto.js` (modulo), `api/newsletter.js` (conferma iscrizione), `index.js` (vecchi link `?p=` / `?page_id=`)
 - `lib/cf.js` – sessione firmata, verifica Google, client GitHub
 - `src/admin/` – interfaccia dell'editor (non elaborata da 11ty)
 - `src/wp-content/uploads/` – PDF e immagini del vecchio sito, stessi URL
@@ -73,7 +74,9 @@ Infine, nell'Apps Script: Impostazioni progetto → Proprietà script:
 
 - `DEPLOY_HOOK_URL` = deploy hook del passo 1 → ricaricando il foglio compare il menu **Sito web → Pubblica le date sul sito**
 - `CONTACT_TOKEN` = lo stesso valore della variabile Cloudflare
-- `CONTACT_TO` (facoltativa) = dove arrivano i messaggi del modulo (default `info@mariolorenzetti.org`)
+- `CONTACT_TO` (facoltativa) = dove arrivano i messaggi del modulo, anche più indirizzi separati da virgola (default `info@mariolorenzetti.org`)
+- `SENDER_TOKEN` = API token di Sender.net (Settings → API access tokens) per la casella "newsletter" del modulo
+- `SENDER_GROUP` (solo per le prove) = ID di un gruppo Sender di test: tutte le iscrizioni vanno lì invece che in Italia / France et Suisse. Da togliere dopo la prova
 
 Le email del modulo partono dall'account Google proprietario dello Sheet (limite 100 al giorno con Gmail): conviene che sia un account di Mario o dedicato al sito.
 La prima volta, dopo aver incollato la versione dello script con `doPost`, crea una **Nuova versione** della distribuzione e autorizza l'invio di email.

@@ -13,11 +13,35 @@
  *      CONTACT_TOKEN = stringa casuale, uguale alla variabile CONTACT_TOKEN su Cloudflare
  *      CONTACT_TO    = destinatario (facoltativa, default info@mariolorenzetti.org)
  *    Le email partono dall'account Google proprietario dello script (limite: 100 al giorno con Gmail).
+ *    Se il visitatore spunta "newsletter" riceve un'email con il link di conferma (doppio opt-in):
+ *    la pagina Contatti chiama /api/newsletter (functions/api/newsletter.js), che verifica la firma
+ *    e chiede a doPost (action "subscribe") di iscriverlo su Sender.net. Proprietà script:
+ *      SENDER_TOKEN = API token di Sender (Settings > API access tokens)
+ *      SENDER_GROUP = facoltativa, gruppo unico per le prove (es. "Test group"); altrimenti SENDER_GROUPS
  *    Dopo aver aggiunto doPost: Distribuisci > Gestisci distribuzioni > Nuova versione, e autorizza l'invio email.
  */
 
 const SHEET_NAME = 'Eventi';
 const CONTACTS_SHEET = 'Contatti';
+// Gruppi Sender.net per lingua del modulo.
+const SENDER_GROUPS = { IT: 'aAW4Bz', FR: 'dw2WXw' };
+
+const NEWSLETTER_MAIL = {
+  IT: {
+    subject: "Conferma l'iscrizione alla newsletter di Mario Lorenzetti",
+    body: function (nome, link) {
+      return 'Ciao ' + nome + ',\n\nper ricevere le nuove date dei seminari conferma l\'iscrizione alla newsletter aprendo questo link:\n\n' +
+        link + '\n\nSe non hai chiesto tu l\'iscrizione, ignora questa email.\n\nMario Lorenzetti\n';
+    },
+  },
+  FR: {
+    subject: "Confirmez votre inscription à la newsletter de Mario Lorenzetti",
+    body: function (nome, link) {
+      return 'Bonjour ' + nome + ',\n\npour recevoir les nouvelles dates des stages, confirmez votre inscription à la newsletter en ouvrant ce lien :\n\n' +
+        link + '\n\nSi vous n\'avez pas demandé cette inscription, ignorez cet email.\n\nMario Lorenzetti\n';
+    },
+  },
+};
 
 function getEventsSheet() {
   const sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
@@ -64,21 +88,24 @@ function doPost(e) {
     return reply({ ok: false, error: 'JSON non valido' });
   }
   if (!token || data.token !== token) return reply({ ok: false, error: 'Token non valido' });
+  if (data.action === 'subscribe') return reply(subscribe(props, data));
 
   const to = props.getProperty('CONTACT_TO') || 'info@mariolorenzetti.org';
   const nome = String(data.nome || '');
   const email = String(data.email || '');
   const oggetto = String(data.oggetto || '');
   const messaggio = String(data.messaggio || '');
-  const lingua = String(data.lingua || '');
+  const lingua = data.lingua === 'FR' ? 'FR' : 'IT';
+  const newsletter = data.newsletter === true;
 
   // Prima l'archivio, poi l'email: se l'invio fallisce il messaggio resta comunque nel foglio.
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = ss.getSheetByName(CONTACTS_SHEET) || ss.insertSheet(CONTACTS_SHEET);
-  if (sheet.getLastRow() === 0) sheet.appendRow(['Data', 'Nome', 'Email', 'Oggetto', 'Messaggio', 'Lingua']);
+  if (sheet.getLastRow() === 0) sheet.appendRow(['Data', 'Nome', 'Email', 'Oggetto', 'Messaggio', 'Lingua', 'Newsletter']);
+  if (sheet.getRange(1, 7).getValue() === '') sheet.getRange(1, 7).setValue('Newsletter');
   // L'apostrofo evita che un testo che inizia con "=" venga interpretato come formula.
   const safe = function (v) { return /^[=+\-@]/.test(v) ? "'" + v : v; };
-  sheet.appendRow([new Date(), safe(nome), safe(email), safe(oggetto), safe(messaggio), lingua]);
+  sheet.appendRow([new Date(), safe(nome), safe(email), safe(oggetto), safe(messaggio), lingua, newsletter ? 'richiesta' : '']);
 
   try {
     MailApp.sendEmail({
@@ -86,12 +113,35 @@ function doPost(e) {
       replyTo: email,
       name: 'Sito mariolorenzetti.org',
       subject: '[Sito] ' + (oggetto || 'Messaggio da ' + nome),
-      body: 'Nome: ' + nome + '\nEmail: ' + email + '\nOggetto: ' + oggetto + '\nLingua: ' + lingua + '\n\n' + messaggio + '\n',
+      body: 'Nome: ' + nome + '\nEmail: ' + email + '\nOggetto: ' + oggetto + '\nLingua: ' + lingua +
+        '\nNewsletter: ' + (newsletter ? 'sì (in attesa di conferma)' : 'no') + '\n\n' + messaggio + '\n',
     });
+    if (newsletter && data.confirmUrl) {
+      const t = NEWSLETTER_MAIL[lingua];
+      MailApp.sendEmail({ to: email, name: 'Mario Lorenzetti', subject: t.subject, body: t.body(nome, data.confirmUrl) });
+    }
   } catch (err) {
     return reply({ ok: false, error: 'Invio email: ' + err.message });
   }
   return reply({ ok: true });
+}
+
+// Iscrizione confermata dal visitatore: lo aggiunge (o aggiorna) su Sender.net.
+function subscribe(props, data) {
+  const senderToken = props.getProperty('SENDER_TOKEN');
+  if (!senderToken) return { ok: false, error: 'SENDER_TOKEN mancante' };
+  const group = props.getProperty('SENDER_GROUP') || SENDER_GROUPS[data.lingua === 'FR' ? 'FR' : 'IT'];
+  const payload = { email: String(data.email || ''), groups: [group] };
+  if (data.nome) payload.firstname = String(data.nome);
+  const res = UrlFetchApp.fetch('https://api.sender.net/v2/subscribers', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: { Authorization: 'Bearer ' + senderToken, Accept: 'application/json' },
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true,
+  });
+  if (res.getResponseCode() >= 300) return { ok: false, error: 'Sender ' + res.getResponseCode() + ': ' + res.getContentText() };
+  return { ok: true };
 }
 
 function onOpen() {

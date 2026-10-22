@@ -3,6 +3,15 @@ layout: layouts/base.njk
 ---
 {%- set fr = lang == "fr" -%}
 {% include "partials/page-header.njk" %}
+{# Conferma newsletter: compare solo arrivando dal link nell'email (?e=…&n=…&s=…). #}
+<div class="px-4 sm:px-6"><form id="iscrizione" action="/api/newsletter" method="post" hidden class="mx-auto mb-12 max-w-3xl border-[1.5px] border-ink bg-saffron-soft p-6 shadow-[8px_8px_0_var(--color-ink)] md:p-8">
+  <input type="hidden" name="lang" value="{{ lang }}">
+  <input type="hidden" name="e"><input type="hidden" name="n"><input type="hidden" name="s">
+  <h2 class="font-display text-3xl">Newsletter</h2>
+  <p class="mt-2 text-lg">{% if fr %}Confirmez l'inscription de <b data-email></b> à la newsletter de Mario Lorenzetti.{% else %}Conferma l'iscrizione di <b data-email></b> alla newsletter di Mario Lorenzetti.{% endif %}</p>
+  <p data-esito role="status" class="mt-4 hidden"></p>
+  <button type="submit" class="btn-primary mt-6">{{ "Confirmer l'inscription" if fr else "Conferma l'iscrizione" }}</button>
+</form></div>
 <div class="mx-auto grid max-w-6xl gap-12 px-4 pb-20 sm:px-6 md:grid-cols-[1fr_1.3fr]">
   <div>
     <dl class="space-y-6">
@@ -38,6 +47,10 @@ layout: layouts/base.njk
       <input type="checkbox" name="privacy" value="1" required class="mt-1 accent-sienna">
       <span>{% if fr %}J'accepte le traitement de mes données selon la <a class="underline" href="{{ site.privacyUrl }}" target="_blank" rel="noopener">politique de confidentialité</a>.{% else %}Acconsento al trattamento dei dati secondo l'<a class="underline" href="{{ site.privacyUrl }}" target="_blank" rel="noopener">informativa privacy</a>.{% endif %} *</span>
     </label>
+    <label class="flex items-start gap-3 text-ink-soft">
+      <input type="checkbox" name="newsletter" value="1" class="mt-1 accent-sienna">
+      <span>{% if fr %}Je souhaite recevoir la newsletter avec les nouvelles dates (je recevrai un email pour confirmer).{% else %}Voglio ricevere la newsletter con le nuove date (riceverò un'email per confermare).{% endif %}</span>
+    </label>
     <button type="submit" class="btn-primary">{{ "Envoyer" if fr else "Invia messaggio" }}</button>
   </form>
 </div>
@@ -64,5 +77,29 @@ layout: layouts/base.njk
       }
       btn.disabled = false;
     });
+
+    const iscr = document.getElementById("iscrizione");
+    if (params.get("e") && params.get("s")) {
+      for (const k of ["e", "n", "s"]) iscr[k].value = params.get(k) || "";
+      iscr.querySelector("[data-email]").textContent = params.get("e");
+      iscr.hidden = false;
+      iscr.scrollIntoView();
+      iscr.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = iscr.querySelector("button");
+        const out = iscr.querySelector("[data-esito]");
+        btn.disabled = true;
+        let data;
+        try {
+          data = await (await fetch(iscr.action, { method: "POST", body: new FormData(iscr) })).json();
+        } catch {
+          data = { ok: false, message: "{{ 'Erreur. Réessayez plus tard.' if fr else 'Errore. Riprova più tardi.' }}" };
+        }
+        out.textContent = data.message;
+        out.className = "mt-4 text-lg " + (data.ok ? "font-bold" : "text-sienna");
+        if (data.ok) { btn.hidden = true; history.replaceState(null, "", location.pathname); }
+        else btn.disabled = false;
+      });
+    }
   })();
 </script>
