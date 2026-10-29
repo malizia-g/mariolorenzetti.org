@@ -11,7 +11,7 @@ Sito di Mario Lorenzetti (Respirazione Olotropica), generato con [Eleventy](http
 | Immagini | Editor (ridimensionate a max 2000 px) → `src/assets/uploads/` | Ottimizzate al build in AVIF/WebP (`/img/`) |
 | Modulo contatti | `functions/api/contatto.js` → `doPost` dell'Apps Script | Email a info@mariolorenzetti.org (inviata dall'account Google dello Sheet) e copia nel foglio "Contatti" |
 | Newsletter | [Sender.net](https://app.sender.net) (gruppi "Italia" e "France et Suisse") | Pulsanti nel footer verso i moduli di Sender; casella nel modulo contatti con email di conferma → `functions/api/newsletter.js` → iscrizione via Apps Script |
-| Colori | `src/_data/themes.js` (10 temi) | Tema in uso: `default` in `themes.js`. Il selettore compare solo con `THEME_PICKER=1` (attivo nello staging su GitHub Pages; su Cloudflare aggiungere la variabile e rifare il deploy) |
+| Colori | `src/_data/themes.js` (10 temi) | Tema in uso: `default` in `themes.js`. Il selettore compare solo con `THEME_PICKER=1` (su Cloudflare aggiungere la variabile e rifare il deploy; per lo staging in `.github/workflows/pages.yml`) |
 
 ## Sviluppo
 
