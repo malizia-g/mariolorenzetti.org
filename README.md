@@ -100,7 +100,7 @@ Secret `CF_DEPLOY_HOOK` (repo → Settings → Secrets and variables → Actions
 
 ### 6. File audio/video grandi
 
-Non stanno nel repo (limite 25 MB per file su Pages): `Conferenza-Convegno-SISSC-2025.mp4` (127 MB), `Conferenza-Huxley-SISSC2018-1.wav` (428 MB), `Conference-Payzac-matrices-perinatales.m4a` (37 MB). Da spostare su YouTube o Cloudflare R2 prima della disattivazione del vecchio hosting, aggiornando i link in `src/pagine/pubblicazioni.md` e `src/fr/accueil.md`.
+Non stanno nel repo (limite 25 MB per file su Pages): sono nel bucket R2 `media-mario`, pubblico su `https://media.mariolorenzetti.org/` (R2 → bucket → Custom Domains). `Conferenza-Convegno-SISSC-2025.mp4` (127 MB), `Conference-Payzac-matrices-perinatales.m4a` (37 MB) e `Conferenza-Huxley-SISSC2018.mp3` (30 MB, MP3 V0 dal WAV originale di 428 MB). I vecchi indirizzi sul dominio principale fanno redirect lì (`src/cloudflare/_redirects`). Nuovi file: R2 → bucket → Upload, poi link `https://media.mariolorenzetti.org/<nome>`.
 
 ### 7. Editor `/admin/` con login Google (facoltativo)
 

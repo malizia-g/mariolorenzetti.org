@@ -5,6 +5,11 @@
 /seminari-di-respirazione-olotropica-intensivi /calendario/ 301
 /seminari-di-respirazione-olotropica-intensivi/ /calendario/ 301
 
+# File audio/video grandi, ora su Cloudflare R2 (bucket media-mario)
+/Conferenza-Convegno-SISSC-2025.mp4 https://media.mariolorenzetti.org/Conferenza-Convegno-SISSC-2025.mp4 301
+/Conferenza-Huxley-SISSC2018-1.wav https://media.mariolorenzetti.org/Conferenza-Huxley-SISSC2018.mp3 301
+/Conference-Payzac-matrices-perinatales.m4a https://media.mariolorenzetti.org/Conference-Payzac-matrices-perinatales.m4a 301
+
 # Categorie, autore, tag, paginazione
 /category/pubblicazioni-di-mario-lorenzetti/* /scritti/ 301
 /category/calendario-dei-seminari/* /calendario/ 301

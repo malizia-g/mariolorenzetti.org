@@ -34,15 +34,15 @@ lang: it
 
 - CONVEGNO ANNUALE SISSC 2025
 
-<video controls="" poster="/wp-content/uploads/2026/06/Convegno-SISSC-2025.jpg" src="https://mariolorenzetti.org/Conferenza-Convegno-SISSC-2025.mp4"></video>
+<video controls="" poster="/wp-content/uploads/2026/06/Convegno-SISSC-2025.jpg" src="https://media.mariolorenzetti.org/Conferenza-Convegno-SISSC-2025.mp4"></video>
 
 - Conferenza del 2018 su Huxley
 
-<audio controls="" src="https://mariolorenzetti.org/Conferenza-Huxley-SISSC2018-1.wav"></audio>
+<audio controls="" src="https://media.mariolorenzetti.org/Conferenza-Huxley-SISSC2018.mp3"></audio>
 
 - Conférence de 2015 sur les matrices périnatales (FR)
 
-<audio controls="" src="https://mariolorenzetti.org/Conference-Payzac-matrices-perinatales.m4a"></audio>
+<audio controls="" src="https://media.mariolorenzetti.org/Conference-Payzac-matrices-perinatales.m4a"></audio>
 
 ## Studioso di Aldous Huxley, Mario Lorenzetti ha pubblicato diversi studi su questo autore:
 

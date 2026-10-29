@@ -65,7 +65,7 @@ Author of Jung and Shamanism in Dialogue.*
 
 - Conférence de 2015 sur les matrices périnatales (FR)
 
-<audio controls="" src="https://mariolorenzetti.org/Conference-Payzac-matrices-perinatales.m4a"></audio>
+<audio controls="" src="https://media.mariolorenzetti.org/Conference-Payzac-matrices-perinatales.m4a"></audio>
 
 ### Visitez aussi:
 
