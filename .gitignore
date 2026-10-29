@@ -5,3 +5,4 @@ src/_data/*.cache.json
 .env
 .dev.vars
 .wrangler/
+media-grandi/

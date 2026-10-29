@@ -11,9 +11,10 @@ export default {
   defaultImage: "/assets/og-default.jpg",
   // Staging (GitHub Pages) non deve essere indicizzato.
   noindex: process.env.NOINDEX === "1",
-  // Selettore dei temi di colore: attivo finché Mario non sceglie il tema
-  // (poi impostare themes.default in themes.js e mettere false qui).
-  themePicker: process.env.THEME_PICKER !== "0",
+  // Selettore dei temi di colore: spento in produzione (tema scelto: themes.default
+  // in themes.js). Si riaccende con la variabile THEME_PICKER=1, già impostata
+  // per lo staging su GitHub Pages; su Cloudflare basta aggiungerla e rifare il deploy.
+  themePicker: process.env.THEME_PICKER === "1",
   newsletter: {
     it: "https://stats.sender.net/forms/axk7jz/view",
     fr: "https://stats.sender.net/forms/elYMkV/view",
