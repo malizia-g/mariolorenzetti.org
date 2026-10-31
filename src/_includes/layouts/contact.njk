@@ -52,10 +52,13 @@ turnstile: true
       <input type="checkbox" name="newsletter" value="1" class="mt-1 accent-sienna">
       <span>{% if fr %}Je souhaite recevoir la newsletter avec les nouvelles dates (je recevrai un email pour confirmer).{% else %}Voglio ricevere la newsletter con le nuove date (riceverò un'email per confermare).{% endif %}</span>
     </label>
-    {%- if site.turnstileSiteKey %}
-    <div class="cf-turnstile" data-sitekey="{{ site.turnstileSiteKey }}" data-language="{{ lang }}"></div>
-    {%- endif %}
-    <button type="submit" class="btn-primary">{{ "Envoyer" if fr else "Invia messaggio" }}</button>
+    {# Turnstile a fianco del pulsante; su mobile va sotto. #}
+    <div class="flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+      <button type="submit" class="btn-primary">{{ "Envoyer" if fr else "Invia messaggio" }}</button>
+      {%- if site.turnstileSiteKey %}
+      <div class="cf-turnstile" data-sitekey="{{ site.turnstileSiteKey }}" data-language="{{ lang }}"></div>
+      {%- endif %}
+    </div>
   </form>
 </div>
 <script>
