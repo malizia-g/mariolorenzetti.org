@@ -52,6 +52,9 @@
     })();
   </script>
   {%- endif %}
+  {%- if turnstile and site.turnstileSiteKey %}
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  {%- endif %}
   <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="/assets/favicon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">

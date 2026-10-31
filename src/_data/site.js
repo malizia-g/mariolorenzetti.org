@@ -15,6 +15,10 @@ export default {
   // in themes.js). Si riaccende con la variabile THEME_PICKER=1: su Cloudflare
   // aggiungerla e rifare il deploy, per lo staging in .github/workflows/pages.yml.
   themePicker: process.env.THEME_PICKER === "1",
+  // Cloudflare Turnstile sul modulo contatti: chiave pubblica (site key) dalla variabile
+  // TURNSTILE_SITE_KEY. Senza, il widget non compare; la chiave segreta TURNSTILE_SECRET_KEY
+  // va nelle variabili della Pages Function (functions/api/contatto.js).
+  turnstileSiteKey: process.env.TURNSTILE_SITE_KEY || "",
   newsletter: {
     it: "https://stats.sender.net/forms/axk7jz/view",
     fr: "https://stats.sender.net/forms/elYMkV/view",

@@ -1,5 +1,6 @@
 ---
 layout: layouts/base.njk
+turnstile: true
 ---
 {%- set fr = lang == "fr" -%}
 {% include "partials/page-header.njk" %}
@@ -51,6 +52,9 @@ layout: layouts/base.njk
       <input type="checkbox" name="newsletter" value="1" class="mt-1 accent-sienna">
       <span>{% if fr %}Je souhaite recevoir la newsletter avec les nouvelles dates (je recevrai un email pour confirmer).{% else %}Voglio ricevere la newsletter con le nuove date (riceverò un'email per confermare).{% endif %}</span>
     </label>
+    {%- if site.turnstileSiteKey %}
+    <div class="cf-turnstile" data-sitekey="{{ site.turnstileSiteKey }}" data-language="{{ lang }}"></div>
+    {%- endif %}
     <button type="submit" class="btn-primary">{{ "Envoyer" if fr else "Invia messaggio" }}</button>
   </form>
 </div>
@@ -75,6 +79,8 @@ layout: layouts/base.njk
         esito.textContent = "{{ 'Erreur. Écrivez directement à ' if fr else 'Errore di invio. Scrivi direttamente a ' }}{{ site.email }}";
         esito.className = "p-4 border-[1.5px] border-ink bg-cream text-sienna";
       }
+      // Il token Turnstile vale per un solo invio: ne serve uno nuovo per il prossimo.
+      window.turnstile?.reset();
       btn.disabled = false;
     });
 
