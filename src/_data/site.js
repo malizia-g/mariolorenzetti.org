@@ -18,7 +18,9 @@ export default {
   // Cloudflare Turnstile sul modulo contatti: chiave pubblica (site key) dalla variabile
   // TURNSTILE_SITE_KEY. Senza, il widget non compare; la chiave segreta TURNSTILE_SECRET_KEY
   // va nelle variabili della Pages Function (functions/api/contatto.js).
-  turnstileSiteKey: process.env.TURNSTILE_SITE_KEY || "",
+  // In locale (npm run dev) usa la chiave di prova di Cloudflare, che passa sempre.
+  turnstileSiteKey:
+    process.env.TURNSTILE_SITE_KEY || (process.env.ELEVENTY_RUN_MODE === "serve" ? "1x00000000000000000000AA" : ""),
   newsletter: {
     it: "https://stats.sender.net/forms/axk7jz/view",
     fr: "https://stats.sender.net/forms/elYMkV/view",
